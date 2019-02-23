@@ -15,7 +15,7 @@ references:
         ~/.gradle
 
   workspace: &workspace
-               ~/home/circleci/workspace
+               ~/workspace
 
   attach_release_workspace: &attach_release_workspace
     attach_workspace:
@@ -23,9 +23,9 @@ references:
 
   persist_release_workspace: &persist_release_workspace
     persist_to_workspace:
-      root: *workspace
+      root: .
       paths:
-      - app/build
+          - .
 
   android_config: &android_config
     working_directory: *workspace
