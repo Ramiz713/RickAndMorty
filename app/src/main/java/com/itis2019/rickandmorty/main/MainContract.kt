@@ -1,7 +1,5 @@
 package com.itis2019.rickandmorty.main
 
-import android.app.Activity
-import android.widget.ImageView
 import com.itis2019.rickandmorty.model.Character
 
 interface MainContract {
@@ -15,6 +13,6 @@ interface MainContract {
 
     interface Presenter {
         fun onViewAttach()
-        fun onItemClicked(activity: Activity, position: Int, image: ImageView)
+        fun getOnClickedItem(position: Int): Character
     }
 }
