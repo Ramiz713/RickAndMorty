@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".info.CharacterInfoActivity">
+
+    <ImageView
+            android:id="@+id/image_character"
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginTop="20dp"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintLeft_toLeftOf="@id/line_left"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="@id/line_right"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+    <android.support.constraint.Guideline
+            android:id="@+id/line_left"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <android.support.constraint.Guideline
+            android:id="@+id/line_right"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/tv_name"
+            android:textSize="24sp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintRight_toRightOf="@id/line_right"
+            app:layout_constraintLeft_toLeftOf="@id/line_left"
+            app:layout_constraintTop_toBottomOf="@id/image_character"
+            android:fontFamily="@font/roiland_sans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/tv_status"/>
+
+    <TextView
+            android:id="@+id/tv_status"
+            android:textSize="24sp"
+            android:fontFamily="@font/roiland_sans"
+            app:layout_constraintRight_toRightOf="@id/line_right"
+            app:layout_constraintLeft_toLeftOf="@id/line_left"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/tv_species"/>
+
+    <TextView
+            android:id="@+id/tv_species"
+            android:textSize="24sp"
+            android:fontFamily="@font/roiland_sans"
+            app:layout_constraintRight_toRightOf="@id/line_right"
+            app:layout_constraintLeft_toLeftOf="@id/line_left"
+            app:layout_constraintTop_toBottomOf="@id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toTopOf="@id/tv_gender"/>
+
+    <TextView
+            android:id="@+id/tv_gender"
+            android:textSize="24sp"
+            android:fontFamily="@font/roiland_sans"
+            app:layout_constraintRight_toRightOf="@id/line_right"
+            app:layout_constraintLeft_toLeftOf="@id/line_left"
+            app:layout_constraintTop_toBottomOf="@id/tv_species"
+            app:layout_constraintBottom_toTopOf="@id/tv_origin"
+            app:layout_constraintHorizontal_bias="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/tv_origin"
+            android:textSize="24sp"
+            android:fontFamily="@font/roiland_sans"
+            app:layout_constraintRight_toRightOf="@id/line_right"
+            app:layout_constraintLeft_toLeftOf="@id/line_left"
+            app:layout_constraintTop_toBottomOf="@id/tv_gender"
+            app:layout_constraintBottom_toTopOf="@id/tv_location"
+            app:layout_constraintHorizontal_bias="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/tv_location"
+            android:textSize="24sp"
+            android:fontFamily="@font/roiland_sans"
+            app:layout_constraintRight_toRightOf="@id/line_right"
+            app:layout_constraintLeft_toLeftOf="@id/line_left"
+            app:layout_constraintTop_toBottomOf="@id/tv_origin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</android.support.constraint.ConstraintLayout>
