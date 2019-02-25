@@ -41,7 +41,7 @@
             app:layout_constraintLeft_toLeftOf="@id/line_left"
             app:layout_constraintTop_toBottomOf="@id/image_character"
             android:fontFamily="@font/roiland_sans"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toTopOf="@id/tv_status"/>
@@ -53,7 +53,7 @@
             app:layout_constraintRight_toRightOf="@id/line_right"
             app:layout_constraintLeft_toLeftOf="@id/line_left"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toTopOf="@id/tv_species"/>
@@ -65,7 +65,7 @@
             app:layout_constraintRight_toRightOf="@id/line_right"
             app:layout_constraintLeft_toLeftOf="@id/line_left"
             app:layout_constraintTop_toBottomOf="@id/tv_status"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toTopOf="@id/tv_gender"/>
@@ -79,7 +79,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_species"
             app:layout_constraintBottom_toTopOf="@id/tv_origin"
             app:layout_constraintHorizontal_bias="0"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"/>
 
     <TextView
@@ -91,7 +91,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_gender"
             app:layout_constraintBottom_toTopOf="@id/tv_location"
             app:layout_constraintHorizontal_bias="0"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"/>
 
     <TextView
@@ -103,7 +103,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_origin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"/>
 
 </android.support.constraint.ConstraintLayout>

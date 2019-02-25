@@ -16,9 +16,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainContract.View {
     private val presenter = MainPresenter(this)
-    private val adapter = CharacterAdapter { position: Int, image: ImageView
-        ->
-        navigateToInfoActivity(presenter.getOnClickedItem(position), image)
+    private lateinit var imageView: ImageView
+
+    private val adapter = CharacterAdapter { position: Int, image: ImageView ->
+        imageView = image
+        presenter.onClickedItem(position)
     }
 
     companion object {
@@ -31,15 +33,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setContentView(R.layout.activity_main)
         rv_characters.layoutManager = GridLayoutManager(this, 3)
         rv_characters.adapter = adapter
-        presenter.onViewAttach()
+        presenter.onFirstViewAttach()
     }
 
-    private fun navigateToInfoActivity(character: Character, image: ImageView) {
+    override fun navigateToInfoActivity(character: Character) {
         val intent = Intent(this, CharacterInfoActivity::class.java)
         intent.putExtra(EXTRA_CHARACTER_ITEM, character)
-        val transitionName = ViewCompat.getTransitionName(image) ?: ""
+        val transitionName = ViewCompat.getTransitionName(imageView) ?: ""
         intent.putExtra(EXTRA_IMAGE, transitionName)
-        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, image, transitionName)
+        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, imageView, transitionName)
         startActivity(intent, optionsCompat.toBundle())
     }
 

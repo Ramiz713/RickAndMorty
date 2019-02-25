@@ -9,10 +9,12 @@ interface MainContract {
         fun hideProgress()
         fun showError(message: String)
         fun setItems(items: List<Character>)
+        fun navigateToInfoActivity(character: Character)
     }
 
     interface Presenter {
-        fun onViewAttach()
-        fun getOnClickedItem(position: Int): Character
+        fun onFirstViewAttach()
+        fun onClickedItem(position: Int)
+        fun onLoadNextPage()
     }
 }

@@ -7,23 +7,31 @@ import com.itis2019.rickandmorty.subscribeSingleOnIoObserveOnUi
 
 class MainPresenter(var mainView: MainContract.View) : MainContract.Presenter {
     private var charactersList = ArrayList<Character>()
+    private lateinit var apiService: RickAndMortyApiService
+    private var pageCount = 1
+
+    override fun onFirstViewAttach() {
+        apiService = RickAndMortyApiService.create()
+        onLoadNextPage()
+    }
 
     @SuppressLint("CheckResult")
-    override fun onViewAttach() {
-        RickAndMortyApiService.create().getCharactersList()
+    override fun onLoadNextPage() {
+        apiService.getCharactersList(pageCount)
             .map { it.results }
-            .doOnSuccess {
-                charactersList.addAll(it)
-            }
+            .doOnSuccess { pageCount++ }
             .subscribeSingleOnIoObserveOnUi()
             .doOnSubscribe { mainView.showProgress() }
             .doAfterTerminate { mainView.hideProgress() }
             .subscribe(
-                { mainView.setItems(it) },
+                {
+                    mainView.setItems(it)
+                    charactersList.addAll(it)
+                },
                 { error -> mainView.showError(error.toString()) }
             )
     }
 
-    override fun getOnClickedItem(position: Int): Character =
-        charactersList[position]
+    override fun onClickedItem(position: Int) =
+        mainView.navigateToInfoActivity(charactersList[position])
 }
