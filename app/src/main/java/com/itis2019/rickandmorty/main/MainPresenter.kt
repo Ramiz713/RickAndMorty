@@ -25,8 +25,8 @@ class MainPresenter(var mainView: MainContract.View) : MainContract.Presenter {
             .doAfterTerminate { mainView.hideProgress() }
             .subscribe(
                 {
-                    mainView.setItems(it)
                     charactersList.addAll(it)
+                    mainView.setItems(charactersList)
                 },
                 { error -> mainView.showError(error.toString()) }
             )
