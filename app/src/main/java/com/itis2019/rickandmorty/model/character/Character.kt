@@ -1,6 +1,11 @@
-package com.itis2019.rickandmorty.model
+package com.itis2019.rickandmorty.model.character
 
+import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.TypeConverters
 import android.os.Parcelable
+import com.itis2019.rickandmorty.model.EpisodesConverter
 import kotlinx.android.parcel.Parcelize
 
 data class CharacterList(
@@ -9,14 +14,19 @@ data class CharacterList(
 )
 
 @Parcelize
+@Entity(tableName = "character_data")
 data class Character(
     val created: String,
+    @TypeConverters(EpisodesConverter::class)
     val episode: List<String>,
     val gender: String,
+    @PrimaryKey
     val id: Int,
     val image: String,
-    val location: Location,
+    @Embedded(prefix = "location_")
+    val location: LocationOfCharacter,
     val name: String,
+    @Embedded(prefix = "origin_")
     val origin: Origin,
     val species: String,
     val status: String,
@@ -25,7 +35,7 @@ data class Character(
 ) : Parcelable
 
 @Parcelize
-data class Location(
+data class LocationOfCharacter(
     val name: String,
     val url: String
 ) : Parcelable
