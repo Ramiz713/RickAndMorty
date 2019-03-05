@@ -37,21 +37,18 @@ class LocationFragment : MvpAppCompatFragment(), LocationView {
         val recyclerView = view.findViewById<RecyclerView>(R.id.rv_locations)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
-
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private var currentPage = 1
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
-                    val visibleItemCount = manager.childCount
-                    val totalItemCount = manager.itemCount
-                    val pastVisibleItems = manager.findFirstVisibleItemPosition()
+                val visibleItemCount = manager.childCount
+                val totalItemCount = manager.itemCount
+                val pastVisibleItems = manager.findFirstVisibleItemPosition()
 
-                    if (!isLoading && !isLastPage && pastVisibleItems + visibleItemCount >= totalItemCount) {
-                        isLoading = true
-                        locationPresenter.onLoadNextPage(++currentPage)
-                    }
+                if (!isLoading && !isLastPage && pastVisibleItems + visibleItemCount >= totalItemCount) {
+                    isLoading = true
+                    locationPresenter.onLoadNextPage(++currentPage)
                 }
             }
         })
@@ -73,11 +70,11 @@ class LocationFragment : MvpAppCompatFragment(), LocationView {
     }
 
     override fun showProgress() {
-        progress_bar.visibility = View.GONE
+        progress_bar.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        progress_bar.visibility = View.VISIBLE
+        progress_bar.visibility = View.GONE
     }
 
     override fun showError(message: String) =

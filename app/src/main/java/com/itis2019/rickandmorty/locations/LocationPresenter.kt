@@ -33,6 +33,8 @@ class LocationPresenter(app: Application?) : MvpPresenter<LocationView>() {
                 locationDao?.insertAll(it)
             }
             .subscribeSingleOnIoObserveOnUi()
+            .doOnSubscribe { viewState.showProgress() }
+            .doAfterTerminate { viewState.hideProgress() }
             .subscribe(
                 {
                     locationList.addAll(it)

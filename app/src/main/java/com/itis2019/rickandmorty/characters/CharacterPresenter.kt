@@ -15,9 +15,8 @@ import io.reactivex.Completable
 class CharacterPresenter(app: Application?) : MvpPresenter<CharacterView>() {
 
     private var charactersList = ArrayList<Character>()
-    private val application = app
     private val apiService = RickAndMortyApiService.create()
-    private val characterDao = AppDatabase.getInstance(application)?.characterDao()
+    private val characterDao = AppDatabase.getInstance(app)?.characterDao()
 
     override fun onFirstViewAttach() = onLoadNextPage(1)
 

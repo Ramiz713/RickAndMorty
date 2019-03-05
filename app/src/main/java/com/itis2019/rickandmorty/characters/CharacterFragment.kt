@@ -1,6 +1,8 @@
 package com.itis2019.rickandmorty.characters
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.view.ViewCompat
@@ -18,6 +20,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.itis2019.rickandmorty.R
 import com.itis2019.rickandmorty.info.CharacterInfoActivity
 import com.itis2019.rickandmorty.main.MainActivity
+import com.itis2019.rickandmorty.main.MainActivity.Companion.APP_PREFERENCES
+import com.itis2019.rickandmorty.main.MainActivity.Companion.EXTRA_INTERVAL_BETWEEN_PAGES
 import com.itis2019.rickandmorty.model.character.Character
 import kotlinx.android.synthetic.main.fragment_character.*
 
@@ -48,20 +52,26 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
         val recyclerView = view.findViewById<RecyclerView>(R.id.rv_characters)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
+
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private var currentPage = 1
+            private var defaultInterval = 1
+            private val listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, _ ->
+                defaultInterval = sharedPreferences.getInt(EXTRA_INTERVAL_BETWEEN_PAGES, 0)
+            }
+            private val sharedPreferences = activity?.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
+                ?.registerOnSharedPreferenceChangeListener(listener)
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
-                    val visibleItemCount = manager.childCount
-                    val totalItemCount = manager.itemCount
-                    val pastVisibleItems = manager.findFirstVisibleItemPosition()
+                val visibleItemCount = manager.childCount
+                val totalItemCount = manager.itemCount
+                val pastVisibleItems = manager.findFirstVisibleItemPosition()
 
-                    if (!isLoading && !isLastPage && pastVisibleItems + visibleItemCount >= totalItemCount) {
-                        isLoading = true
-                        characterPresenter.onLoadNextPage(++currentPage)
-                    }
+                if (!isLoading && !isLastPage && pastVisibleItems + visibleItemCount >= totalItemCount) {
+                    currentPage += defaultInterval
+                    isLoading = true
+                    characterPresenter.onLoadNextPage(currentPage)
                 }
             }
         })
