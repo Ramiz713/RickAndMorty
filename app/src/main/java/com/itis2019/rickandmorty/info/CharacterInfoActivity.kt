@@ -5,9 +5,9 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.bumptech.glide.Glide
 import com.itis2019.rickandmorty.R
+import com.itis2019.rickandmorty.entities.Character
 import com.itis2019.rickandmorty.main.MainActivity.Companion.EXTRA_CHARACTER_ITEM
 import com.itis2019.rickandmorty.main.MainActivity.Companion.EXTRA_IMAGE
-import com.itis2019.rickandmorty.model.character.Character
 import kotlinx.android.synthetic.main.activity_info.*
 
 class CharacterInfoActivity : MvpAppCompatActivity(), CharacterInfoView {

@@ -1,56 +1,39 @@
 package com.itis2019.rickandmorty.characters
 
-import android.annotation.SuppressLint
-import android.app.Application
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import com.itis2019.rickandmorty.model.AppDatabase
-import com.itis2019.rickandmorty.model.RickAndMortyApiService
-import com.itis2019.rickandmorty.model.character.Character
-import com.itis2019.rickandmorty.subscribeCompletableOnIoObserveOnUi
+import com.itis2019.rickandmorty.entities.Character
+import com.itis2019.rickandmorty.repository.Repository
 import com.itis2019.rickandmorty.subscribeSingleOnIoObserveOnUi
-import io.reactivex.Completable
+import io.reactivex.Single
+import io.reactivex.rxkotlin.subscribeBy
 
 @InjectViewState
-class CharacterPresenter(app: Application?) : MvpPresenter<CharacterView>() {
+class CharacterPresenter(private val repository: Repository) : MvpPresenter<CharacterView>() {
 
     private var charactersList = ArrayList<Character>()
-    private val apiService = RickAndMortyApiService.create()
-    private val characterDao = AppDatabase.getInstance(app)?.characterDao()
 
     override fun onFirstViewAttach() = onLoadNextPage(1)
 
-    @SuppressLint("CheckResult")
+    @Suppress("CheckResult")
     fun onLoadNextPage(pageCount: Int) {
-        apiService.getCharactersList(pageCount)
-            .map {
-                if (it.info.next.isEmpty())
-                    viewState.setFlagIsLastPage(true)
-                it.results
-            }
+        repository.getCharactersPage(pageCount)
             .doOnSuccess {
                 viewState.setFlagIsLoading(false)
-                if (pageCount == 1) characterDao?.deleteAll()
-                characterDao?.insertAll(it)
+                if (pageCount != 1) repository.cacheCharacters(it)
+                else repository.rewriteCacheCharacters(it)
             }
+            .onErrorResumeNext { Single.just(repository.getCachedCharacters()) }
             .subscribeSingleOnIoObserveOnUi()
             .doOnSubscribe { viewState.showProgress() }
             .doAfterTerminate { viewState.hideProgress() }
-            .subscribe(
-                {
+            .subscribeBy(
+                onSuccess = {
                     charactersList.addAll(it)
                     viewState.setItems(charactersList)
                 },
-                { error -> handleError(error) }
+                onError = { viewState.showError(it.toString()) }
             )
-    }
-
-    @SuppressLint("CheckResult")
-    private fun handleError(error: Throwable) {
-        viewState.showError(error.toString())
-        Completable.fromCallable { charactersList.addAll(characterDao?.getAll() ?: ArrayList()) }
-            .subscribeCompletableOnIoObserveOnUi()
-            .subscribe { viewState.setItems(charactersList) }
     }
 
     fun onClickedItem(position: Int) =

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.itis2019.rickandmorty.R
-import com.itis2019.rickandmorty.model.character.Character
+import com.itis2019.rickandmorty.entities.Character
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.character_item.*
 import kotlinx.android.synthetic.main.character_item.view.*

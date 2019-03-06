@@ -1,14 +1,12 @@
-package com.itis2019.rickandmorty.model
+package com.itis2019.rickandmorty.repository.database
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
-import com.itis2019.rickandmorty.model.character.Character
-import com.itis2019.rickandmorty.model.character.CharacterDao
-import com.itis2019.rickandmorty.model.location.Location
-import com.itis2019.rickandmorty.model.location.LocationDao
+import com.itis2019.rickandmorty.entities.Character
+import com.itis2019.rickandmorty.entities.Location
 
 @Database(entities = [Character::class, Location::class], version = 1)
 @TypeConverters(EpisodesConverter::class)

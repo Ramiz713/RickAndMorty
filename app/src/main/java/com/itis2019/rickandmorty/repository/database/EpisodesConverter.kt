@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.model
+package com.itis2019.rickandmorty.repository.database
 
 import android.arch.persistence.room.TypeConverter
 import com.google.gson.Gson

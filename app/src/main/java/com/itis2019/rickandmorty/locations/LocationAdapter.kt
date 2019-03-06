@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.itis2019.rickandmorty.R
-import com.itis2019.rickandmorty.model.location.Location
+import com.itis2019.rickandmorty.entities.Location
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.location_item.*
 

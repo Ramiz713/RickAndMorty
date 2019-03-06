@@ -1,7 +1,7 @@
 package com.itis2019.rickandmorty.locations
 
 import android.support.v7.util.DiffUtil
-import com.itis2019.rickandmorty.model.location.Location
+import com.itis2019.rickandmorty.entities.Location
 
 class DiffCallbackLocation : DiffUtil.ItemCallback<Location>() {
     override fun areItemsTheSame(oldItem: Location, newItem: Location): Boolean =

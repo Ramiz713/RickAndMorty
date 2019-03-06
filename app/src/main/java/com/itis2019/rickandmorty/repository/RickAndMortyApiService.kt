@@ -1,8 +1,9 @@
-package com.itis2019.rickandmorty.model
+package com.itis2019.rickandmorty.repository
 
 import com.itis2019.rickandmorty.BuildConfig
-import com.itis2019.rickandmorty.model.character.CharacterList
-import com.itis2019.rickandmorty.model.location.LocationList
+import com.itis2019.rickandmorty.entities.Character
+import com.itis2019.rickandmorty.entities.Location
+import com.itis2019.rickandmorty.entities.Page
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -13,14 +14,10 @@ import retrofit2.http.Query
 interface RickAndMortyApiService {
 
     @GET("character?")
-    fun getCharactersList(
-        @Query("page") page: Int
-    ): Single<CharacterList>
+    fun getCharactersList(@Query("page") page: Int): Single<Page<Character>>
 
     @GET("location?")
-    fun getLocationsList(
-        @Query("page") page: Int
-    ): Single<LocationList>
+    fun getLocationsList(@Query("page") page: Int): Single<Page<Location>>
 
     companion object ApiFactory {
 

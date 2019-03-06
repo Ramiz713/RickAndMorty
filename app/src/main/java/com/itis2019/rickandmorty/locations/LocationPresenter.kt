@@ -1,54 +1,39 @@
 package com.itis2019.rickandmorty.locations
 
 import android.annotation.SuppressLint
-import android.app.Application
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import com.itis2019.rickandmorty.model.AppDatabase
-import com.itis2019.rickandmorty.model.RickAndMortyApiService
-import com.itis2019.rickandmorty.model.location.Location
-import com.itis2019.rickandmorty.subscribeCompletableOnIoObserveOnUi
+import com.itis2019.rickandmorty.entities.Location
+import com.itis2019.rickandmorty.repository.Repository
 import com.itis2019.rickandmorty.subscribeSingleOnIoObserveOnUi
-import io.reactivex.Completable
+import io.reactivex.Single
+import io.reactivex.rxkotlin.subscribeBy
 
 @InjectViewState
-class LocationPresenter(app: Application?) : MvpPresenter<LocationView>() {
+class LocationPresenter(private val repository: Repository) : MvpPresenter<LocationView>() {
+
     private var locationList = ArrayList<Location>()
-    private val apiService = RickAndMortyApiService.create()
-    private val locationDao = AppDatabase.getInstance(app)?.locationDao()
 
     override fun onFirstViewAttach() = onLoadNextPage(1)
 
     @SuppressLint("CheckResult")
     fun onLoadNextPage(pageCount: Int) {
-        apiService.getLocationsList(pageCount)
-            .map {
-                if (it.info.next.isEmpty())
-                    viewState.setFlagIsLastPage(true)
-                it.results
-            }
+        repository.getLocationsPage(pageCount)
             .doOnSuccess {
                 viewState.setFlagIsLoading(false)
-                if (pageCount == 1) locationDao?.deleteAll()
-                locationDao?.insertAll(it)
+                if (pageCount != 1) repository.cacheLocations(it)
+                else repository.rewriteCacheLocations(it)
             }
+            .onErrorResumeNext { Single.just(repository.getCachedLocations()) }
             .subscribeSingleOnIoObserveOnUi()
             .doOnSubscribe { viewState.showProgress() }
             .doAfterTerminate { viewState.hideProgress() }
-            .subscribe(
-                {
+            .subscribeBy(
+                onSuccess = {
                     locationList.addAll(it)
                     viewState.setItems(locationList)
                 },
-                { error -> handleError(error) }
+                onError = { viewState.showError(it.toString()) }
             )
-    }
-
-    @SuppressLint("CheckResult")
-    private fun handleError(error: Throwable) {
-        viewState.showError(error.toString())
-        Completable.fromCallable { locationList.addAll(locationDao?.getAll() ?: ArrayList()) }
-            .subscribeCompletableOnIoObserveOnUi()
-            .subscribe { viewState.setItems(locationList) }
     }
 }
