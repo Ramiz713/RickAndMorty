@@ -96,9 +96,9 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
         startActivity(intent, optionsCompat.toBundle())
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         sharedPreferences = null
-        super.onDestroy()
+        super.onDestroyView()
     }
 
     override fun showProgress() {
