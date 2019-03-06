@@ -14,7 +14,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -122,6 +121,6 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
     }
 
     override fun showError(message: String) {
-        view?.let { Toast.makeText(activity, message, Snackbar.LENGTH_LONG).show() }
+        view?.let { Snackbar.make(it, message, Snackbar.LENGTH_LONG).show() }
     }
 }
