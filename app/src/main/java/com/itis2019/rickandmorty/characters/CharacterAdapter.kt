@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.main
+package com.itis2019.rickandmorty.characters
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.recyclerview.extensions.ListAdapter
@@ -9,16 +9,22 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.itis2019.rickandmorty.R
-import com.itis2019.rickandmorty.model.Character
+import com.itis2019.rickandmorty.entities.Character
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.character_item.*
 import kotlinx.android.synthetic.main.character_item.view.*
 
 class CharacterAdapter(private val listener: (Int, ImageView) -> Unit) :
-    ListAdapter<Character, CharacterAdapter.CharacterHolder>(DiffCallback()) {
+    ListAdapter<Character, CharacterAdapter.CharacterHolder>(DiffCallbackCharacter()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterHolder =
-        CharacterHolder(LayoutInflater.from(parent.context).inflate(R.layout.character_item, parent, false))
+        CharacterHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.character_item,
+                parent,
+                false
+            )
+        )
 
     override fun onBindViewHolder(holder: CharacterHolder, position: Int) {
         val item = getItem(position)

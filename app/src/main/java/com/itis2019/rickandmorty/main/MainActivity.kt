@@ -1,61 +1,85 @@
 package com.itis2019.rickandmorty.main
 
-import android.content.Intent
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
-import android.view.View
-import android.widget.ImageView
-import android.widget.Toast
+import android.support.v4.view.ViewPager
+import android.text.InputType
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.EditText
+import com.arellomobile.mvp.MvpAppCompatActivity
+import com.arellomobile.mvp.presenter.InjectPresenter
 import com.itis2019.rickandmorty.R
-import com.itis2019.rickandmorty.info.CharacterInfoActivity
-import com.itis2019.rickandmorty.model.Character
+import com.itis2019.rickandmorty.characters.CharacterFragment
+import com.itis2019.rickandmorty.locations.LocationFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), MainContract.View {
-    private val presenter = MainPresenter(this)
-    private lateinit var imageView: ImageView
-
-    private val adapter = CharacterAdapter { position: Int, image: ImageView ->
-        imageView = image
-        presenter.onClickedItem(position)
-    }
+class MainActivity : MvpAppCompatActivity(), MainView {
 
     companion object {
         const val EXTRA_CHARACTER_ITEM = "Character item"
+        const val EXTRA_INTERVAL_BETWEEN_PAGES = "Interval"
+        const val APP_PREFERENCES = "PaginationInfo"
         const val EXTRA_IMAGE = "Image"
     }
+
+    @InjectPresenter
+    lateinit var mainPresenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        rv_characters.layoutManager = GridLayoutManager(this, 3)
-        rv_characters.adapter = adapter
-        presenter.onFirstViewAttach()
+        setViewPager(view_pager)
+        tabs.setupWithViewPager(view_pager)
     }
 
-    override fun navigateToInfoActivity(character: Character) {
-        val intent = Intent(this, CharacterInfoActivity::class.java)
-        intent.putExtra(EXTRA_CHARACTER_ITEM, character)
-        val transitionName = ViewCompat.getTransitionName(imageView) ?: ""
-        intent.putExtra(EXTRA_IMAGE, transitionName)
-        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, imageView, transitionName)
-        startActivity(intent, optionsCompat.toBundle())
+    private fun setViewPager(pager: ViewPager) {
+        val adapter = TabPagerAdapter(supportFragmentManager)
+        val fragmentOne = CharacterFragment()
+        val fragmentTwo = LocationFragment()
+        adapter.addFragment(fragmentOne, "Characters")
+        adapter.addFragment(fragmentTwo, "Locations")
+        pager.adapter = adapter
     }
 
-    override fun showProgress() {
-        progress_bar.visibility = View.VISIBLE
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
-    override fun hideProgress() {
-        progress_bar.visibility = View.GONE
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return (when (item.itemId) {
+            R.id.pagination_size -> {
+                mainPresenter.paginationSizeItemClicked()
+                false
+            }
+            else -> super.onOptionsItemSelected(item)
+        })
     }
 
-    override fun setItems(items: List<Character>) =
-        adapter.submitList(items)
+    override fun showDialog() {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Pagination size")
+        val editText = EditText(this)
+        editText.inputType = InputType.TYPE_CLASS_NUMBER
+        dialog.setView(editText)
+            .setMessage("You can set the interval between pages(for characters)")
+            .setPositiveButton("Confirm") { dialogInterface: DialogInterface, _: Int ->
+                savePageNumber(dialogInterface, editText)
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+            .show()
+    }
 
-    override fun showError(message: String) =
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun savePageNumber(dialogInterface: DialogInterface, editText: EditText) {
+        val number = editText.text.toString().toInt()
+        val paginationInfo = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
+        if (number != 0)
+            paginationInfo.edit().putInt(EXTRA_INTERVAL_BETWEEN_PAGES, number).apply()
+        dialogInterface.dismiss()
+    }
 }
