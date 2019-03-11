@@ -23,17 +23,17 @@ class CharacterPresenter(private val repository: Repository) : MvpPresenter<Char
                 if (pageCount != 1) repository.cacheCharacters(it)
                 else repository.rewriteCacheCharacters(it)
             }
-            .onErrorResumeNext { Single.just(repository.getCachedCharacters()) }
+            .onErrorResumeNext {
+                viewState.showError(it.message ?: "")
+                Single.just(repository.getCachedCharacters())
+            }
             .subscribeSingleOnIoObserveOnUi()
             .doOnSubscribe { viewState.showProgress() }
             .doAfterTerminate { viewState.hideProgress() }
-            .subscribeBy(
-                onSuccess = {
-                    charactersList.addAll(it)
-                    viewState.setItems(charactersList)
-                },
-                onError = { viewState.showError(it.toString()) }
-            )
+            .subscribeBy {
+                charactersList.addAll(it)
+                viewState.setItems(charactersList)
+            }
     }
 
     fun onClickedItem(position: Int) =

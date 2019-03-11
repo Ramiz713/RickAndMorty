@@ -24,16 +24,16 @@ class LocationPresenter(private val repository: Repository) : MvpPresenter<Locat
                 if (pageCount != 1) repository.cacheLocations(it)
                 else repository.rewriteCacheLocations(it)
             }
-            .onErrorResumeNext { Single.just(repository.getCachedLocations()) }
+            .onErrorResumeNext {
+                viewState.showError(it.message ?: "")
+                Single.just(repository.getCachedLocations())
+            }
             .subscribeSingleOnIoObserveOnUi()
             .doOnSubscribe { viewState.showProgress() }
             .doAfterTerminate { viewState.hideProgress() }
-            .subscribeBy(
-                onSuccess = {
-                    locationList.addAll(it)
-                    viewState.setItems(locationList)
-                },
-                onError = { viewState.showError(it.toString()) }
-            )
+            .subscribeBy {
+                locationList.addAll(it)
+                viewState.setItems(locationList)
+            }
     }
 }
