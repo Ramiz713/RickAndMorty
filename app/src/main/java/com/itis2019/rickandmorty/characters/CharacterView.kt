@@ -3,6 +3,7 @@ package com.itis2019.rickandmorty.characters
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.itis2019.rickandmorty.entities.Character
 
@@ -15,5 +16,6 @@ interface CharacterView : MvpView {
     fun setFlagIsLoading(flag: Boolean)
     fun showProgress()
     fun hideProgress()
+    @StateStrategyType(SkipStrategy::class)
     fun showError(message: String)
 }
