@@ -10,24 +10,30 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.itis2019.rickandmorty.Injection
+import com.itis2019.rickandmorty.App.Companion.locationSComponent
 import com.itis2019.rickandmorty.R
 import com.itis2019.rickandmorty.entities.Location
 import kotlinx.android.synthetic.main.fragment_location.*
+import javax.inject.Inject
 
 class LocationFragment : MvpAppCompatFragment(), LocationView {
 
     private var isLoading = false
     private var isLastPage = false
 
+    @Inject
     @InjectPresenter
     lateinit var locationPresenter: LocationPresenter
 
     @ProvidePresenter
-    fun provideLocationPresenter(): LocationPresenter =
-        LocationPresenter(Injection.provideRickAndMortyRepository(activity?.applicationContext))
+    fun provideLocationPresenter(): LocationPresenter = locationPresenter
 
     private val adapter = LocationAdapter { position: Int -> }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        locationSComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_location, container, false)

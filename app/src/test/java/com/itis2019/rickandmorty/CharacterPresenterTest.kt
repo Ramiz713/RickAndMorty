@@ -48,10 +48,10 @@ class CharacterPresenterTest {
 
         presenter.attachView(mockView)
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).setItems(charactersList)
-        verify(mockViewState, timeout(100)).setFlagIsLoading(false)
-        verify(mockViewState, timeout(100)).hideProgress()
+        verify(mockViewState).showProgress()
+        verify(mockViewState).setItems(charactersList)
+        verify(mockViewState).setFlagIsLoading(false)
+        verify(mockViewState).hideProgress()
     }
 
     @Test
@@ -61,10 +61,10 @@ class CharacterPresenterTest {
 
         presenter.onLoadNextPage(1)
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).setItems(charactersList)
-        verify(mockViewState, timeout(100)).setFlagIsLoading(false)
-        verify(mockViewState, timeout(100)).hideProgress()
+        verify(mockViewState).showProgress()
+        verify(mockViewState).setItems(charactersList)
+        verify(mockViewState).setFlagIsLoading(false)
+        verify(mockViewState).hideProgress()
     }
 
     @Test
@@ -76,9 +76,9 @@ class CharacterPresenterTest {
 
         presenter.onLoadNextPage(1)
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).showError(TITLE_ERROR)
-        verify(mockViewState, timeout(100)).setItems(charactersList)
-        verify(mockViewState, timeout(100)).hideProgress()
+        verify(mockViewState).showProgress()
+        verify(mockViewState).showError(TITLE_ERROR)
+        verify(mockViewState).setItems(charactersList)
+        verify(mockViewState).hideProgress()
     }
 }

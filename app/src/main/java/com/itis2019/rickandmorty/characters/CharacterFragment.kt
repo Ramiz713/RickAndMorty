@@ -17,7 +17,7 @@ import android.widget.ImageView
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.itis2019.rickandmorty.Injection
+import com.itis2019.rickandmorty.App.Companion.characterSComponent
 import com.itis2019.rickandmorty.R
 import com.itis2019.rickandmorty.entities.Character
 import com.itis2019.rickandmorty.info.CharacterInfoActivity
@@ -25,6 +25,7 @@ import com.itis2019.rickandmorty.main.MainActivity
 import com.itis2019.rickandmorty.main.MainActivity.Companion.APP_PREFERENCES
 import com.itis2019.rickandmorty.main.MainActivity.Companion.EXTRA_INTERVAL_BETWEEN_PAGES
 import kotlinx.android.synthetic.main.fragment_character.*
+import javax.inject.Inject
 
 class CharacterFragment : MvpAppCompatFragment(), CharacterView {
 
@@ -33,16 +34,21 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
     private var isLastPage = false
     private var sharedPreferences: SharedPreferences? = null
 
+    @Inject
     @InjectPresenter
     lateinit var characterPresenter: CharacterPresenter
 
     @ProvidePresenter
-    fun provideCharacterPresenter(): CharacterPresenter =
-        CharacterPresenter(Injection.provideRickAndMortyRepository(activity?.applicationContext))
+    fun provideCharacterPresenter(): CharacterPresenter = characterPresenter
 
     private val adapter = CharacterAdapter { position: Int, image: ImageView ->
         imageView = image
         characterPresenter.onClickedItem(position)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        characterSComponent.inject(this)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
