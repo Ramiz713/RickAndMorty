@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.locations
+package com.itis2019.rickandmorty.ui.locations
 
 import android.support.v7.util.DiffUtil
 import com.itis2019.rickandmorty.entities.Location

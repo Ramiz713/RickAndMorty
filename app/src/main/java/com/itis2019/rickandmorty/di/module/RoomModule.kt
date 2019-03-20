@@ -8,29 +8,24 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class RoomModule(app: Application) {
+class RoomModule(private val app: Application) {
 
-    private var database: AppDatabase
-
-    init {
-        database = Room.databaseBuilder(
+    @Provides
+    @Singleton
+    fun provideRoomDatabase() =
+        Room.databaseBuilder(
             app,
             AppDatabase::class.java,
             DATABASE_NAME
         ).build()
-    }
 
     @Provides
     @Singleton
-    fun provideRoomDatabase() = database
+    fun provideCharacterDao(database: AppDatabase) = database.characterDao()
 
     @Provides
     @Singleton
-    fun provideCharacterDao() = database.characterDao()
-
-    @Provides
-    @Singleton
-    fun provideLocationDao() = database.locationDao()
+    fun provideLocationDao(database: AppDatabase) = database.locationDao()
 
     companion object {
         private const val DATABASE_NAME = "rick_and_morty_app.db"

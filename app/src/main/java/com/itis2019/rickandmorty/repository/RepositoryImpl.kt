@@ -2,13 +2,15 @@ package com.itis2019.rickandmorty.repository
 
 import com.itis2019.rickandmorty.entities.Character
 import com.itis2019.rickandmorty.entities.Location
-import com.itis2019.rickandmorty.repository.database.AppDatabase
+import com.itis2019.rickandmorty.repository.database.CharacterDao
+import com.itis2019.rickandmorty.repository.database.LocationDao
 import io.reactivex.Single
 
-class RepositoryImpl(private val apiService: RickAndMortyApiService, val database: AppDatabase) : Repository {
-
-    private val characterDao = database.characterDao()
-    private val locationDao = database.locationDao()
+class RepositoryImpl(
+    private val apiService: RickAndMortyApiService,
+    private val characterDao: CharacterDao,
+    private val locationDao: LocationDao
+) : Repository {
 
     override fun getCharactersPage(pageCount: Int): Single<List<Character>> =
         apiService.getCharactersList(pageCount)

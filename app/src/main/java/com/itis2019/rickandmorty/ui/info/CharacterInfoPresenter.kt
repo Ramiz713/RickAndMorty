@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.info
+package com.itis2019.rickandmorty.ui.info
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter

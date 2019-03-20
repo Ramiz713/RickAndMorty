@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.characters
+package com.itis2019.rickandmorty.ui.characters
 
 import android.content.Context
 import android.content.Intent
@@ -20,10 +20,10 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.itis2019.rickandmorty.App.Companion.characterSComponent
 import com.itis2019.rickandmorty.R
 import com.itis2019.rickandmorty.entities.Character
-import com.itis2019.rickandmorty.info.CharacterInfoActivity
-import com.itis2019.rickandmorty.main.MainActivity
-import com.itis2019.rickandmorty.main.MainActivity.Companion.APP_PREFERENCES
-import com.itis2019.rickandmorty.main.MainActivity.Companion.EXTRA_INTERVAL_BETWEEN_PAGES
+import com.itis2019.rickandmorty.ui.info.CharacterInfoActivity
+import com.itis2019.rickandmorty.ui.main.MainActivity
+import com.itis2019.rickandmorty.ui.main.MainActivity.Companion.APP_PREFERENCES
+import com.itis2019.rickandmorty.ui.main.MainActivity.Companion.EXTRA_INTERVAL_BETWEEN_PAGES
 import kotlinx.android.synthetic.main.fragment_character.*
 import javax.inject.Inject
 

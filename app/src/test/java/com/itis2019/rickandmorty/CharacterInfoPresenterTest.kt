@@ -1,8 +1,8 @@
 package com.itis2019.rickandmorty
 
-import com.itis2019.rickandmorty.info.CharacterInfoPresenter
-import com.itis2019.rickandmorty.info.CharacterInfoView
-import com.itis2019.rickandmorty.info.`CharacterInfoView$$State`
+import com.itis2019.rickandmorty.ui.info.CharacterInfoPresenter
+import com.itis2019.rickandmorty.ui.info.CharacterInfoView
+import com.itis2019.rickandmorty.ui.info.`CharacterInfoView$$State`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.characters
+package com.itis2019.rickandmorty.ui.characters
 
 import android.support.v7.util.DiffUtil
 import com.itis2019.rickandmorty.entities.Character

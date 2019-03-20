@@ -1,39 +1,44 @@
-package com.itis2019.rickandmorty.locations
+package com.itis2019.rickandmorty.ui.characters
 
-import android.annotation.SuppressLint
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import com.itis2019.rickandmorty.entities.Location
+import com.itis2019.rickandmorty.entities.Character
 import com.itis2019.rickandmorty.repository.Repository
 import com.itis2019.rickandmorty.subscribeSingleOnIoObserveOnUi
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
 
 @InjectViewState
-class LocationPresenter(private val repository: Repository) : MvpPresenter<LocationView>() {
+class CharacterPresenter(val repository: Repository) : MvpPresenter<CharacterView>() {
 
-    private var locationList = ArrayList<Location>()
+    private var charactersList = ArrayList<Character>()
 
     override fun onFirstViewAttach() = onLoadNextPage(1)
 
-    @SuppressLint("CheckResult")
+    @Suppress("CheckResult")
     fun onLoadNextPage(pageCount: Int) {
-        repository.getLocationsPage(pageCount)
+        repository.getCharactersPage(pageCount)
             .doOnSuccess {
                 viewState.setFlagIsLoading(false)
-                if (pageCount != 1) repository.cacheLocations(it)
-                else repository.rewriteCacheLocations(it)
+                if (pageCount != 1) repository.cacheCharacters(it)
+                else repository.rewriteCacheCharacters(it)
+            }
+            .map {
+                charactersList.addAll(it)
+                charactersList.toList()
             }
             .onErrorResumeNext {
                 viewState.showError(it.message ?: "")
-                Single.just(repository.getCachedLocations())
+                Single.just(repository.getCachedCharacters())
             }
             .subscribeSingleOnIoObserveOnUi()
             .doOnSubscribe { viewState.showProgress() }
             .doAfterTerminate { viewState.hideProgress() }
             .subscribeBy {
-                locationList.addAll(it)
-                viewState.setItems(locationList)
+                viewState.setItems(it)
             }
     }
+
+    fun onClickedItem(position: Int) =
+        viewState.navigateToInfoActivity(charactersList[position])
 }
