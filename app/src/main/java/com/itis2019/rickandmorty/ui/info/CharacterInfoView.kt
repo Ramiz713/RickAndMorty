@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.info
+package com.itis2019.rickandmorty.ui.info
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy

@@ -1,10 +1,10 @@
 package com.itis2019.rickandmorty
 
 import com.itis2019.rickandmorty.entities.Location
-import com.itis2019.rickandmorty.locations.LocationPresenter
-import com.itis2019.rickandmorty.locations.LocationView
-import com.itis2019.rickandmorty.locations.`LocationView$$State`
 import com.itis2019.rickandmorty.repository.Repository
+import com.itis2019.rickandmorty.ui.locations.LocationPresenter
+import com.itis2019.rickandmorty.ui.locations.LocationView
+import com.itis2019.rickandmorty.ui.locations.`LocationView$$State`
 import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.schedulers.Schedulers

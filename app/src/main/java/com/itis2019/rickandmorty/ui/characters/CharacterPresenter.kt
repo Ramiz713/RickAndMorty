@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.characters
+package com.itis2019.rickandmorty.ui.characters
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
@@ -9,7 +9,7 @@ import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
 
 @InjectViewState
-class CharacterPresenter(private val repository: Repository) : MvpPresenter<CharacterView>() {
+class CharacterPresenter(val repository: Repository) : MvpPresenter<CharacterView>() {
 
     private var charactersList = ArrayList<Character>()
 
@@ -23,6 +23,10 @@ class CharacterPresenter(private val repository: Repository) : MvpPresenter<Char
                 if (pageCount != 1) repository.cacheCharacters(it)
                 else repository.rewriteCacheCharacters(it)
             }
+            .map {
+                charactersList.addAll(it)
+                charactersList.toList()
+            }
             .onErrorResumeNext {
                 viewState.showError(it.message ?: "")
                 Single.just(repository.getCachedCharacters())
@@ -31,8 +35,7 @@ class CharacterPresenter(private val repository: Repository) : MvpPresenter<Char
             .doOnSubscribe { viewState.showProgress() }
             .doAfterTerminate { viewState.hideProgress() }
             .subscribeBy {
-                charactersList.addAll(it)
-                viewState.setItems(charactersList)
+                viewState.setItems(it)
             }
     }
 

@@ -1,7 +1,7 @@
 package com.itis2019.rickandmorty
 
-import com.itis2019.rickandmorty.main.MainPresenter
-import com.itis2019.rickandmorty.main.`MainView$$State`
+import com.itis2019.rickandmorty.ui.main.MainPresenter
+import com.itis2019.rickandmorty.ui.main.`MainView$$State`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

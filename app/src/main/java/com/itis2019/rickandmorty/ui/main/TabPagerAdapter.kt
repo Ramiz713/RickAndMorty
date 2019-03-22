@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.main
+package com.itis2019.rickandmorty.ui.main
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

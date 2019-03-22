@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.locations
+package com.itis2019.rickandmorty.ui.locations
 
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.widget.RecyclerView

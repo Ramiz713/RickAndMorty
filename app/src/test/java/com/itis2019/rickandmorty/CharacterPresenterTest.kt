@@ -1,10 +1,10 @@
 package com.itis2019.rickandmorty
 
-import com.itis2019.rickandmorty.characters.CharacterPresenter
-import com.itis2019.rickandmorty.characters.CharacterView
-import com.itis2019.rickandmorty.characters.`CharacterView$$State`
 import com.itis2019.rickandmorty.entities.Character
 import com.itis2019.rickandmorty.repository.Repository
+import com.itis2019.rickandmorty.ui.characters.CharacterPresenter
+import com.itis2019.rickandmorty.ui.characters.CharacterView
+import com.itis2019.rickandmorty.ui.characters.`CharacterView$$State`
 import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.schedulers.Schedulers

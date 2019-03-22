@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.characters
+package com.itis2019.rickandmorty.ui.characters
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.recyclerview.extensions.ListAdapter

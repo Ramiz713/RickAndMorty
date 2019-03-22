@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.main
+package com.itis2019.rickandmorty.ui.main
 
 import android.app.AlertDialog
 import android.content.Context
@@ -12,8 +12,8 @@ import android.widget.EditText
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.itis2019.rickandmorty.R
-import com.itis2019.rickandmorty.characters.CharacterFragment
-import com.itis2019.rickandmorty.locations.LocationFragment
+import com.itis2019.rickandmorty.ui.characters.CharacterFragment
+import com.itis2019.rickandmorty.ui.locations.LocationFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : MvpAppCompatActivity(), MainView {

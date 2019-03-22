@@ -1,4 +1,4 @@
-package com.itis2019.rickandmorty.locations
+package com.itis2019.rickandmorty.ui.locations
 
 import android.annotation.SuppressLint
 import com.arellomobile.mvp.InjectViewState
