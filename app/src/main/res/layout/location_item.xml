@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="@dimen/cardview_default_elevation"
-        android:layout_width="match_parent" android:layout_height="wrap_content">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_margin="8dp"
+                                   app:cardCornerRadius="@dimen/cardview_default_elevation">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
         <TextView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tv_dimension"
+                android:id="@+id/tv_location_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:id="@+id/tv_location_name"
-                android:gravity="center"
-                android:textSize="24sp"
-                android:fontFamily="@font/roiland_sans"
                 android:ellipsize="end"
+                android:fontFamily="@font/roiland_sans"
+                android:gravity="center"
                 android:maxLines="2"
-                android:layout_margin="8dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_dimension"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
                 android:id="@+id/tv_dimension"
-                app:layout_constraintTop_toBottomOf="@id/tv_location_name"
                 android:layout_width="0dp"
-                android:fontFamily="@font/roiland_sans"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:fontFamily="@font/roiland_sans"
+                android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_height="wrap_content"/>
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_location_name"/>
 
-    </android.support.constraint.ConstraintLayout>
-</android.support.v7.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

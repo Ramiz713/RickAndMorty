@@ -1,7 +1,7 @@
 package com.itis2019.rickandmorty.di.module
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.itis2019.rickandmorty.repository.database.AppDatabase
 import dagger.Module
 import dagger.Provides

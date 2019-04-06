@@ -1,16 +1,16 @@
 package com.itis2019.rickandmorty.ui.locations
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.itis2019.rickandmorty.App.Companion.locationSComponent
+import com.google.android.material.snackbar.Snackbar
+import com.itis2019.rickandmorty.App
 import com.itis2019.rickandmorty.R
 import com.itis2019.rickandmorty.entities.Location
 import kotlinx.android.synthetic.main.fragment_location.*
@@ -31,7 +31,7 @@ class LocationFragment : MvpAppCompatFragment(), LocationView {
     private val adapter = LocationAdapter { position: Int -> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        locationSComponent.inject(this)
+        App.component.inject(this)
         super.onCreate(savedInstanceState)
     }
 

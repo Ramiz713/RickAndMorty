@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/bnv_navigation"
+            app:startDestination="@id/sixthFragment">
+
+    <fragment
+            android:id="@+id/sixthFragment" android:name="com.itis2019.rickandmorty.ui.bottomNavigation.SixthFragment"
+            android:label="fragment_sixth" tools:layout="@layout/fragment_sixth">
+        <action android:id="@+id/action_sixthFragment_to_seventhFragment" app:destination="@id/seventhFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/seventhFragment"
+            android:name="com.itis2019.rickandmorty.ui.bottomNavigation.SeventhFragment"
+            android:label="fragment_seventh" tools:layout="@layout/fragment_seventh">
+        <argument
+                android:name="title"
+                android:defaultValue="null"
+                app:argType="string"/>
+    </fragment>
+
+</navigation>

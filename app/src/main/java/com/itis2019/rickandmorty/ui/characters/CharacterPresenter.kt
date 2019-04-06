@@ -2,14 +2,16 @@ package com.itis2019.rickandmorty.ui.characters
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.itis2019.rickandmorty.Screens
 import com.itis2019.rickandmorty.entities.Character
 import com.itis2019.rickandmorty.repository.Repository
 import com.itis2019.rickandmorty.subscribeSingleOnIoObserveOnUi
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
+import ru.terrakok.cicerone.Router
 
 @InjectViewState
-class CharacterPresenter(val repository: Repository) : MvpPresenter<CharacterView>() {
+class CharacterPresenter(val repository: Repository, val router: Router) : MvpPresenter<CharacterView>() {
 
     private var charactersList = ArrayList<Character>()
 
@@ -40,5 +42,5 @@ class CharacterPresenter(val repository: Repository) : MvpPresenter<CharacterVie
     }
 
     fun onClickedItem(position: Int) =
-        viewState.navigateToInfoActivity(charactersList[position])
+        router.navigateTo(Screens.CharacterInfoScreen(charactersList[position]))
 }

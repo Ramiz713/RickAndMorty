@@ -1,12 +1,13 @@
 package com.itis2019.rickandmorty.ui.characters
 
-import android.support.v4.view.ViewCompat
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.itis2019.rickandmorty.R
 import com.itis2019.rickandmorty.entities.Character
@@ -15,7 +16,7 @@ import kotlinx.android.synthetic.main.character_item.*
 import kotlinx.android.synthetic.main.character_item.view.*
 
 class CharacterAdapter(private val listener: (Int, ImageView) -> Unit) :
-    ListAdapter<Character, CharacterAdapter.CharacterHolder>(DiffCallbackCharacter()) {
+    ListAdapter<Character, CharacterAdapter.CharacterHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterHolder =
         CharacterHolder(
@@ -38,6 +39,17 @@ class CharacterAdapter(private val listener: (Int, ImageView) -> Unit) :
         fun bind(item: Character): Unit = with(item) {
             tv_character_name.text = name
             Glide.with(containerView).load(image).into(image_character)
+        }
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object :
+            DiffUtil.ItemCallback<Character>() {
+            override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean =
+                oldItem.id == newItem.id
+
+            override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean =
+                oldItem == newItem
         }
     }
 }

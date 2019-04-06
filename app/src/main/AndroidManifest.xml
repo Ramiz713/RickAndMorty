@@ -12,9 +12,13 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/LightTheme">
-        <activity android:name="com.itis2019.rickandmorty.ui.info.CharacterInfoActivity">
+        <activity
+                android:name=".ui.bottomNavigation.BottomNavigationActivity"
+                android:label="@string/title_activity_bottom_navigation">
         </activity>
-        <activity android:name="com.itis2019.rickandmorty.ui.main.MainActivity">
+        <activity android:name=".ui.info.CharacterInfoActivity">
+        </activity>
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
