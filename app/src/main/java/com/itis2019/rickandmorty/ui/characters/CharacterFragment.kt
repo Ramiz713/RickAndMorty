@@ -119,7 +119,7 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
 
             override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle {
                 val forward = command as Forward
-                if (forward.screen.screenKey == Screens.CharacterInfoScreen().screenKey) {
+                if (forward.screen.screenKey == Screens.CharacterInfoScreen(Character()).screenKey) {
                     val transitionName = ViewCompat.getTransitionName(imageView) ?: ""
                     activityIntent.putExtra(MainActivity.EXTRA_IMAGE, transitionName)
                     val optionsCompat = ActivityOptionsCompat

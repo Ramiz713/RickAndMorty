@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
+            app:startDestination="@id/navigation_home">
+
+    <fragment android:id="@+id/navigation_home"
+              android:name="com.itis2019.rickandmorty.ui.bottomNavigation.FirstFragment"
+              android:label="fragment_first" tools:layout="@layout/fragment_first">
+        <action android:id="@+id/action_navigation_home_to_fourthFragment" app:destination="@id/fourthFragment"/>
+    </fragment>
+    <fragment android:id="@+id/navigation_dashboard"
+              android:name="com.itis2019.rickandmorty.ui.bottomNavigation.SecondFragment"
+              android:label="fragment_second" tools:layout="@layout/fragment_second">
+        <action android:id="@+id/action_navigation_dashboard_to_fifthFragment" app:destination="@id/fifthFragment"/>
+    </fragment>
+    <fragment android:id="@+id/navigation_notifications"
+              android:name="com.itis2019.rickandmorty.ui.bottomNavigation.ThirdFragment"
+              android:label="fragment_third" tools:layout="@layout/fragment_third">
+        <action android:id="@+id/action_navigation_notifications_to_sixthFragment" app:destination="@id/sixthFragment"/>
+    </fragment>
+    <fragment android:id="@+id/fourthFragment"
+              android:name="com.itis2019.rickandmorty.ui.bottomNavigation.FourthFragment"
+              android:label="fragment_fourth" tools:layout="@layout/fragment_fourth">
+        <action android:id="@+id/action_fourthFragment_to_mainActivity" app:destination="@id/mainActivity"/>
+    </fragment>
+    <fragment android:id="@+id/fifthFragment" android:name="com.itis2019.rickandmorty.ui.bottomNavigation.FifthFragment"
+              android:label="fragment_fifth" tools:layout="@layout/fragment_fifth">
+        <action android:id="@+id/action_fifthFragment_self" app:destination="@id/fifthFragment"/>
+    </fragment>
+    <fragment android:id="@+id/sixthFragment" android:name="com.itis2019.rickandmorty.ui.bottomNavigation.SixthFragment"
+              android:label="fragment_sixth" tools:layout="@layout/fragment_sixth">
+        <action android:id="@+id/action_sixthFragment_to_seventhFragment" app:destination="@id/seventhFragment"/>
+    </fragment>
+    <fragment android:id="@+id/seventhFragment"
+              android:name="com.itis2019.rickandmorty.ui.bottomNavigation.SeventhFragment"
+              android:label="fragment_seventh" tools:layout="@layout/fragment_seventh">
+        <argument
+                android:name="title"
+                app:argType="string"
+                android:defaultValue="null"/>
+    </fragment>
+    <activity android:id="@+id/mainActivity" android:name="com.itis2019.rickandmorty.ui.main.MainActivity"
+              android:label="activity_main" tools:layout="@layout/activity_main"/>
+
+</navigation>

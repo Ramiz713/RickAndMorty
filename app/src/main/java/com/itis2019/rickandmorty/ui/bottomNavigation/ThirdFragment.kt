@@ -6,34 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.itis2019.rickandmorty.App
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.itis2019.rickandmorty.R
-import com.itis2019.rickandmorty.ui.bottomNavigation.mvp.ThirdPresenter
-import com.itis2019.rickandmorty.ui.bottomNavigation.mvp.ThirdView
-import javax.inject.Inject
 
-class ThirdFragment : Fragment(), ThirdView {
-
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: ThirdPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): ThirdPresenter = presenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        App.component.inject(this)
-        super.onCreate(savedInstanceState)
-    }
+class ThirdFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_third, container, false)
-        view.findViewById<Button>(R.id.btn_fragment_to_6).setOnClickListener { presenter.onButtonPressed() }
+        view.findViewById<Button>(R.id.btn_fragment_to_6).setOnClickListener {
+            findNavController(this).navigate(R.id.action_navigation_notifications_to_sixthFragment)
+        }
         return view
     }
 }

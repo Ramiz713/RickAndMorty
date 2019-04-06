@@ -11,7 +11,8 @@ import io.reactivex.rxkotlin.subscribeBy
 import ru.terrakok.cicerone.Router
 
 @InjectViewState
-class CharacterPresenter(val repository: Repository, val router: Router) : MvpPresenter<CharacterView>() {
+class CharacterPresenter(private val repository: Repository, private val router: Router) :
+    MvpPresenter<CharacterView>() {
 
     private var charactersList = ArrayList<Character>()
 

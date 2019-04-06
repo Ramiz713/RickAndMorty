@@ -7,28 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.itis2019.rickandmorty.App
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.itis2019.rickandmorty.R
-import com.itis2019.rickandmorty.ui.bottomNavigation.mvp.FourthPresenter
-import com.itis2019.rickandmorty.ui.bottomNavigation.mvp.FourthView
-import javax.inject.Inject
 
-class FourthFragment : Fragment(), FourthView {
 
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: FourthPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): FourthPresenter = presenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        App.component.inject(this)
-        super.onCreate(savedInstanceState)
-    }
+class FourthFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +19,9 @@ class FourthFragment : Fragment(), FourthView {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_fourth, container, false)
         view.findViewById<Button>(R.id.btn_back_to)
-            .setOnClickListener { presenter.onButtonPressed() }
+            .setOnClickListener {
+                findNavController(this).navigate(R.id.action_fourthFragment_to_mainActivity)
+            }
         return view
     }
 }

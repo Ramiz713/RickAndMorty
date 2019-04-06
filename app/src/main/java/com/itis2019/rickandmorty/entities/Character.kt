@@ -27,4 +27,12 @@ data class Character(
     val status: String,
     val type: String,
     val url: String
-) : Parcelable
+) : Parcelable {
+    constructor() : this(
+        "", ArrayList(),
+        "", 0, "",
+        CharacterLocation("", ""),
+        "", CharacterLocation("", ""),
+        "", "", "", ""
+    )
+}
