@@ -85,4 +85,20 @@ class CharacterPresenterTest {
         verify(mockViewState, timeout(100)).setItems(charactersList)
         verify(mockViewState, timeout(100)).hideProgress()
     }
+
+    @Test
+    fun whenItemClicked() {
+        val charactersList = ArrayList<Character>()
+        charactersList.add(Character())
+        charactersList.add(Character())
+        charactersList.add(Character())
+        charactersList.add(Character())
+
+        doReturn(Single.just(charactersList)).`when`(mockRepository).getCharactersPage(1)
+
+        presenter.onLoadNextPage(1)
+        presenter.onClickedItem(0)
+
+        verify(router, timeout(1000)).navigateTo(Screens.CharacterInfoScreen(Character()))
+    }
 }
