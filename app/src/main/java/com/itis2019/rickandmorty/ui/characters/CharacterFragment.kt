@@ -1,30 +1,31 @@
 package com.itis2019.rickandmorty.ui.characters
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.itis2019.rickandmorty.App.Companion.characterSComponent
+import com.google.android.material.snackbar.Snackbar
+import com.itis2019.rickandmorty.App
 import com.itis2019.rickandmorty.R
+import com.itis2019.rickandmorty.Screens
 import com.itis2019.rickandmorty.entities.Character
-import com.itis2019.rickandmorty.ui.info.CharacterInfoActivity
 import com.itis2019.rickandmorty.ui.main.MainActivity
-import com.itis2019.rickandmorty.ui.main.MainActivity.Companion.APP_PREFERENCES
-import com.itis2019.rickandmorty.ui.main.MainActivity.Companion.EXTRA_INTERVAL_BETWEEN_PAGES
 import kotlinx.android.synthetic.main.fragment_character.*
+import ru.terrakok.cicerone.Navigator
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import ru.terrakok.cicerone.commands.Command
+import ru.terrakok.cicerone.commands.Forward
 import javax.inject.Inject
 
 class CharacterFragment : MvpAppCompatFragment(), CharacterView {
@@ -32,7 +33,9 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
     private lateinit var imageView: ImageView
     private var isLoading = false
     private var isLastPage = false
-    private var sharedPreferences: SharedPreferences? = null
+
+    @Inject
+    lateinit var navigatorHolder: NavigatorHolder
 
     @Inject
     @InjectPresenter
@@ -47,7 +50,7 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        characterSComponent.inject(this)
+        App.component.inject(this)
         super.onCreate(savedInstanceState)
     }
 
@@ -57,34 +60,20 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
         val recyclerView = view.findViewById<RecyclerView>(R.id.rv_characters)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
-        sharedPreferences = activity?.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private var currentPage = 1
-            private var defaultInterval = 1
-            private var initFlag = true
-
-            private val listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, _ ->
-                defaultInterval = sharedPreferences.getInt(EXTRA_INTERVAL_BETWEEN_PAGES, 0)
-            }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (initFlag) {
-                    sharedPreferences?.registerOnSharedPreferenceChangeListener(listener)
-                    defaultInterval = sharedPreferences?.getInt(EXTRA_INTERVAL_BETWEEN_PAGES, 0) ?: 1
-                    initFlag = false
-                }
-
                 if (dy > 0) {
                     val visibleItemCount = manager.childCount
                     val totalItemCount = manager.itemCount
                     val pastVisibleItems = manager.findFirstVisibleItemPosition()
 
                     if (!isLoading && !isLastPage && pastVisibleItems + visibleItemCount >= totalItemCount) {
-                        currentPage += defaultInterval
                         isLoading = true
-                        characterPresenter.onLoadNextPage(currentPage)
+                        characterPresenter.onLoadNextPage(++currentPage)
                     }
                 }
             }
@@ -92,19 +81,14 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
         return view
     }
 
-    override fun navigateToInfoActivity(character: Character) {
-        val intent = Intent(activity, CharacterInfoActivity::class.java)
-        intent.putExtra(MainActivity.EXTRA_CHARACTER_ITEM, character)
-        val transitionName = ViewCompat.getTransitionName(imageView) ?: ""
-        intent.putExtra(MainActivity.EXTRA_IMAGE, transitionName)
-        val optionsCompat = ActivityOptionsCompat
-            .makeSceneTransitionAnimation(activity as AppCompatActivity, imageView, transitionName)
-        startActivity(intent, optionsCompat.toBundle())
+    override fun onResume() {
+        navigatorHolder.setNavigator(getNavigator())
+        super.onResume()
     }
 
-    override fun onDestroyView() {
-        sharedPreferences = null
-        super.onDestroyView()
+    override fun onPause() {
+        navigatorHolder.removeNavigator()
+        super.onPause()
     }
 
     override fun showProgress() {
@@ -129,4 +113,20 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
     override fun showError(message: String) {
         view?.let { Snackbar.make(it, message, Snackbar.LENGTH_LONG).show() }
     }
+
+    private fun getNavigator(): Navigator =
+        object : SupportAppNavigator(activity, childFragmentManager, R.id.container_characters) {
+
+            override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle {
+                val forward = command as Forward
+                if (forward.screen.screenKey == Screens.CharacterInfoScreen(Character()).screenKey) {
+                    val transitionName = ViewCompat.getTransitionName(imageView) ?: ""
+                    activityIntent.putExtra(MainActivity.EXTRA_IMAGE, transitionName)
+                    val optionsCompat = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(activity as AppCompatActivity, imageView, transitionName)
+                    return optionsCompat.toBundle() ?: Bundle()
+                }
+                return Bundle()
+            }
+        }
 }

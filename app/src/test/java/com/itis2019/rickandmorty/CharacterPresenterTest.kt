@@ -17,6 +17,7 @@ import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
+import ru.terrakok.cicerone.Router
 
 @RunWith(MockitoJUnitRunner::class)
 class CharacterPresenterTest {
@@ -25,6 +26,9 @@ class CharacterPresenterTest {
 
     @Mock
     lateinit var mockRepository: Repository
+
+    @Mock
+    lateinit var router: Router
 
     @Mock
     lateinit var mockViewState: `CharacterView$$State`
@@ -43,7 +47,7 @@ class CharacterPresenterTest {
     @Test
     fun onFirstViewAttach() {
         val mockView = mock(CharacterView::class.java)
-        val charactersList: ArrayList<Character> = ArrayList()
+        val charactersList = ArrayList<Character>()
         doReturn(Single.just(charactersList)).`when`(mockRepository).getCharactersPage(1)
 
         presenter.attachView(mockView)
@@ -56,7 +60,7 @@ class CharacterPresenterTest {
 
     @Test
     fun whenPageLoadedSuccess() {
-        val charactersList: List<Character> = ArrayList()
+        val charactersList = ArrayList<Character>()
         doReturn(Single.just(charactersList)).`when`(mockRepository).getCharactersPage(1)
 
         presenter.onLoadNextPage(1)
@@ -70,7 +74,7 @@ class CharacterPresenterTest {
     @Test
     fun whenPageLoadedWithError() {
         val expectedError = Throwable(TITLE_ERROR)
-        val charactersList: List<Character> = ArrayList()
+        val charactersList = ArrayList<Character>()
         doReturn(Single.error<Character>(expectedError)).`when`(mockRepository).getCharactersPage(1)
         doReturn(charactersList).`when`(mockRepository).getCachedCharacters()
 
@@ -80,5 +84,21 @@ class CharacterPresenterTest {
         verify(mockViewState, timeout(100)).showError(TITLE_ERROR)
         verify(mockViewState, timeout(100)).setItems(charactersList)
         verify(mockViewState, timeout(100)).hideProgress()
+    }
+
+    @Test
+    fun whenItemClicked() {
+        val charactersList = ArrayList<Character>()
+        charactersList.add(Character())
+        charactersList.add(Character())
+        charactersList.add(Character())
+        charactersList.add(Character())
+
+        doReturn(Single.just(charactersList)).`when`(mockRepository).getCharactersPage(1)
+
+        presenter.onLoadNextPage(1)
+        presenter.onClickedItem(0)
+
+        verify(router, timeout(1000)).navigateTo(Screens.CharacterInfoScreen(Character()))
     }
 }

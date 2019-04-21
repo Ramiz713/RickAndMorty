@@ -1,17 +1,18 @@
 package com.itis2019.rickandmorty.ui.locations
 
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.itis2019.rickandmorty.R
 import com.itis2019.rickandmorty.entities.Location
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.location_item.*
 
 class LocationAdapter(private val listener: (Int) -> Unit) :
-    ListAdapter<Location, LocationAdapter.LocationHolder>(DiffCallbackLocation()) {
+    ListAdapter<Location, LocationAdapter.LocationHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationHolder =
         LocationHolder(
@@ -32,6 +33,17 @@ class LocationAdapter(private val listener: (Int) -> Unit) :
         fun bind(item: Location): Unit = with(item) {
             tv_location_name.text = name
             tv_dimension.text = dimension
+        }
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object :
+            DiffUtil.ItemCallback<Location>() {
+            override fun areItemsTheSame(oldItem: Location, newItem: Location): Boolean =
+                oldItem.id == newItem.id
+
+            override fun areContentsTheSame(oldItem: Location, newItem: Location): Boolean =
+                oldItem == newItem
         }
     }
 }

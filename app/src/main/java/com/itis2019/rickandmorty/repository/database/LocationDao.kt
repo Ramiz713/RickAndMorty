@@ -1,8 +1,8 @@
 package com.itis2019.rickandmorty.repository.database
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
 import com.itis2019.rickandmorty.entities.Location
 
 @Dao

@@ -1,33 +1,37 @@
 package com.itis2019.rickandmorty
 
 import com.itis2019.rickandmorty.ui.main.MainPresenter
-import com.itis2019.rickandmorty.ui.main.`MainView$$State`
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
+import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
+import ru.terrakok.cicerone.Router
 
 @RunWith(MockitoJUnitRunner::class)
 class MainPresenterTest {
-
-    @Mock
-    lateinit var mockViewState: `MainView$$State`
 
     @InjectMocks
     @Spy
     private lateinit var presenter: MainPresenter
 
-    @Before
-    fun setUp() = presenter.setViewState(mockViewState)
+    @Mock
+    private lateinit var router: Router
 
     @Test
-    fun whenShowDialogExpected() {
-        presenter.paginationSizeItemClicked()
+    fun whenSettingsPressed() {
+        presenter.onSettingsClicked()
 
-        verify(mockViewState).showDialog()
+        verify(router, times(1)).navigateTo(Screens.SettingsScreen)
+    }
+
+    @Test
+    fun whenBackPressed() {
+        presenter.onBackPressed()
+
+        verify(router, times(1)).exit()
     }
 }

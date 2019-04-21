@@ -6,5 +6,20 @@
     <string name="gender">Gender: %1$s</string>
     <string name="origin">Origin: %1$s</string>
     <string name="location">Location: %1$s</string>
+    <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="first_fragment">#1 fragment</string>
+    <string name="second_fragment">#2 fragment</string>
+    <string name="third_fragment">#3 fragment</string>
+    <string name="enter_to_4_fragment">GO to #4 fragment</string>
+    <string name="enter_to_5_fragment">GO to #5 fragment</string>
+    <string name="enter_to_6_fragment">GO to #6 fragment</string>
+    <string name="back_to">Back to main screen</string>
+    <string name="button_level">It is level %1$s</string>
+    <string name="get_title">Get title</string>
+
 
 </resources>

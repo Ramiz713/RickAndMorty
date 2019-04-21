@@ -1,21 +1,28 @@
 package com.itis2019.rickandmorty.di.component
 
-import android.content.Context
 import com.itis2019.rickandmorty.di.module.*
-import com.itis2019.rickandmorty.repository.RickAndMortyApiService
-import com.itis2019.rickandmorty.repository.database.AppDatabase
+import com.itis2019.rickandmorty.ui.characters.CharacterFragment
+import com.itis2019.rickandmorty.ui.locations.LocationFragment
+import com.itis2019.rickandmorty.ui.main.MainActivity
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, NetModule::class, ServiceModule::class, RoomModule::class])
+@Component(
+    modules = [
+        AppModule::class,
+        NetModule::class,
+        ServiceModule::class,
+        RoomModule::class,
+        NavigationModule::class,
+        PresentersModule::class,
+        RepositoryModule::class]
+)
 interface AppComponent {
 
-    fun provideApp(): Context
+    fun inject(characterFragment: CharacterFragment)
 
-    fun rickAndMortyApiService(): RickAndMortyApiService
+    fun inject(characterFragment: LocationFragment)
 
-    fun provideAppDatabase(): AppDatabase
-
-    fun plusRepositoryComponent(repositoryModule: RepositoryModule): RepositorySComponent
+    fun inject(mainActivity: MainActivity)
 }

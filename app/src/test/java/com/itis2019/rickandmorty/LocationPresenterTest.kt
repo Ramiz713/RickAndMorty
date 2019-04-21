@@ -43,7 +43,7 @@ class LocationPresenterTest {
     @Test
     fun onFirstViewAttach() {
         val mockView = mock(LocationView::class.java)
-        val locationsList: ArrayList<Location> = ArrayList()
+        val locationsList = ArrayList<Location>()
         doReturn(Single.just(locationsList)).`when`(mockRepository).getLocationsPage(1)
 
         presenter.attachView(mockView)
@@ -56,7 +56,7 @@ class LocationPresenterTest {
 
     @Test
     fun whenPageLoadedSuccess() {
-        val locationsList: ArrayList<Location> = ArrayList()
+        val locationsList = ArrayList<Location>()
         doReturn(Single.just(locationsList)).`when`(mockRepository).getLocationsPage(2)
 
         presenter.onLoadNextPage(2)
@@ -69,7 +69,7 @@ class LocationPresenterTest {
 
     @Test
     fun whenPageLoadedWithError() {
-        val locationsList: ArrayList<Location> = ArrayList()
+        val locationsList = ArrayList<Location>()
         val expectedError = Throwable(TITLE_ERROR)
         doReturn(Single.error<Location>(expectedError)).`when`(mockRepository).getLocationsPage(1)
         doReturn(locationsList).`when`(mockRepository).getCachedLocations()

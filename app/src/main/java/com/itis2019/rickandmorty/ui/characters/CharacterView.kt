@@ -11,7 +11,6 @@ import com.itis2019.rickandmorty.entities.Character
 interface CharacterView : MvpView {
     fun setItems(items: List<Character>)
     @StateStrategyType(OneExecutionStateStrategy::class)
-    fun navigateToInfoActivity(character: Character)
     fun setFlagIsLastPage(flag: Boolean)
     fun setFlagIsLoading(flag: Boolean)
     fun showProgress()
