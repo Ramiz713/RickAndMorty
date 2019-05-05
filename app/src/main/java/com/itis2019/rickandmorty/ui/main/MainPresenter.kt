@@ -8,7 +8,6 @@ class MainPresenter(private val router: Router) : MvpPresenter<MainView>() {
 
     fun onSettingsClicked() = router.navigateTo(Screens.SettingsScreen)
 
-    fun onBackPressed() {
+    fun onBackPressed() =
         router.exit()
-    }
 }

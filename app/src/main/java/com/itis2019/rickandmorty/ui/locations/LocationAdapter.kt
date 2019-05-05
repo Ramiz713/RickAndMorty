@@ -29,7 +29,8 @@ class LocationAdapter(private val listener: (Int) -> Unit) :
         holder.itemView.setOnClickListener { listener(position) }
     }
 
-    class LocationHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    inner class LocationHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+        LayoutContainer {
         fun bind(item: Location): Unit = with(item) {
             tv_location_name.text = name
             tv_dimension.text = dimension

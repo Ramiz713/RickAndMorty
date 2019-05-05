@@ -35,7 +35,8 @@ class CharacterAdapter(private val listener: (Int, ImageView) -> Unit) :
         ViewCompat.setTransitionName(image, item.name)
     }
 
-    class CharacterHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    inner class CharacterHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+        LayoutContainer {
         fun bind(item: Character): Unit = with(item) {
             tv_character_name.text = name
             Glide.with(containerView).load(image).into(image_character)

@@ -90,15 +90,11 @@ class CharacterPresenterTest {
     fun whenItemClicked() {
         val charactersList = ArrayList<Character>()
         charactersList.add(Character())
-        charactersList.add(Character())
-        charactersList.add(Character())
-        charactersList.add(Character())
-
         doReturn(Single.just(charactersList)).`when`(mockRepository).getCharactersPage(1)
 
         presenter.onLoadNextPage(1)
         presenter.onClickedItem(0)
 
-        verify(router, timeout(1000)).navigateTo(Screens.CharacterInfoScreen(Character()))
+        verify(router, times(1)).navigateTo(Screens.CharacterInfoScreen(Character()))
     }
 }
