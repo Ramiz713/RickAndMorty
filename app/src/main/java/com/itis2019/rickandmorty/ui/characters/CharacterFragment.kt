@@ -117,16 +117,15 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
     private fun getNavigator(): Navigator =
         object : SupportAppNavigator(activity, childFragmentManager, R.id.container_characters) {
 
-            override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle {
-                val forward = command as Forward
-                if (forward.screen.screenKey == Screens.CharacterInfoScreen(Character()).screenKey) {
+            override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
+                if ((command as? Forward)?.screen is Screens.CharacterInfoScreen) {
                     val transitionName = ViewCompat.getTransitionName(imageView) ?: ""
                     activityIntent.putExtra(MainActivity.EXTRA_IMAGE, transitionName)
                     val optionsCompat = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(activity as AppCompatActivity, imageView, transitionName)
-                    return optionsCompat.toBundle() ?: Bundle()
+                    return optionsCompat.toBundle()
                 }
-                return Bundle()
+                return null
             }
         }
 }

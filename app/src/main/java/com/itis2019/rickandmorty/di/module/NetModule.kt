@@ -1,10 +1,10 @@
 package com.itis2019.rickandmorty.di.module
 
 import com.itis2019.rickandmorty.BuildConfig
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
@@ -24,14 +24,14 @@ class NetModule {
 
     @Provides
     @Singleton
-    fun provideRxJava2CallAdapterFactory(): RxJava2CallAdapterFactory =
-        RxJava2CallAdapterFactory.create()
+    fun provideRxCoroutineCallAdapterFactory(): CoroutineCallAdapterFactory =
+        CoroutineCallAdapterFactory()
 
     @Provides
     @Singleton
     fun provideRetrofit(
         converterFactory: GsonConverterFactory,
-        callAdapterFactory: RxJava2CallAdapterFactory,
+        callAdapterFactory: CoroutineCallAdapterFactory,
         @Named(NAME_BASE_URL) baseUrl: String
     ): Retrofit = Retrofit.Builder()
         .addCallAdapterFactory(callAdapterFactory)

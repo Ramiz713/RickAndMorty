@@ -5,35 +5,35 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.itis2019.rickandmorty.entities.Location
 import com.itis2019.rickandmorty.repository.Repository
-import com.itis2019.rickandmorty.subscribeSingleOnIoObserveOnUi
-import io.reactivex.Single
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.*
 
 @InjectViewState
 class LocationPresenter(private val repository: Repository) : MvpPresenter<LocationView>() {
 
     private var locationList = ArrayList<Location>()
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.Default + job)
 
     override fun onFirstViewAttach() = onLoadNextPage(1)
 
     @SuppressLint("CheckResult")
     fun onLoadNextPage(pageCount: Int) {
-        repository.getLocationsPage(pageCount)
-            .doOnSuccess {
-                viewState.setFlagIsLoading(false)
-                if (pageCount != 1) repository.cacheLocations(it)
-                else repository.rewriteCacheLocations(it)
+        viewState.showProgress()
+        scope.launch {
+            try {
+                val result = repository.getLocationsPageAsync(pageCount).await().results
+                locationList.addAll(result)
+                if (pageCount != 1) repository.cacheLocations(result)
+                else repository.rewriteCacheLocations(result)
+            } catch (throwable: Throwable) {
+                viewState.showError(throwable.localizedMessage)
+                locationList.addAll(repository.getCachedLocations())
             }
-            .onErrorResumeNext {
-                viewState.showError(it.message ?: "")
-                Single.just(repository.getCachedLocations())
-            }
-            .subscribeSingleOnIoObserveOnUi()
-            .doOnSubscribe { viewState.showProgress() }
-            .doAfterTerminate { viewState.hideProgress() }
-            .subscribeBy {
-                locationList.addAll(it)
+            withContext(Dispatchers.Main) {
                 viewState.setItems(locationList)
+                viewState.hideProgress()
+                viewState.setFlagIsLoading(false)
             }
+        }
     }
 }

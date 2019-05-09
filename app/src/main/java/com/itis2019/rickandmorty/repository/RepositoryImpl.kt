@@ -2,9 +2,10 @@ package com.itis2019.rickandmorty.repository
 
 import com.itis2019.rickandmorty.entities.Character
 import com.itis2019.rickandmorty.entities.Location
+import com.itis2019.rickandmorty.entities.Page
 import com.itis2019.rickandmorty.repository.database.CharacterDao
 import com.itis2019.rickandmorty.repository.database.LocationDao
-import io.reactivex.Single
+import kotlinx.coroutines.Deferred
 
 class RepositoryImpl(
     private val apiService: RickAndMortyApiService,
@@ -12,13 +13,11 @@ class RepositoryImpl(
     private val locationDao: LocationDao
 ) : Repository {
 
-    override fun getCharactersPage(pageCount: Int): Single<List<Character>> =
-        apiService.getCharactersList(pageCount)
-            .map { it.results }
+    override suspend fun getCharactersPageAsync(pageCount: Int): Deferred<Page<Character>> =
+        apiService.getCharactersListAsync(pageCount)
 
-    override fun getLocationsPage(pageCount: Int): Single<List<Location>> =
-        apiService.getLocationsList(pageCount)
-            .map { it.results }
+    override suspend fun getLocationsPageAsync(pageCount: Int): Deferred<Page<Location>> =
+        apiService.getLocationsListAsync(pageCount)
 
     override fun getCachedCharacters(): List<Character> = characterDao.getAll()
 

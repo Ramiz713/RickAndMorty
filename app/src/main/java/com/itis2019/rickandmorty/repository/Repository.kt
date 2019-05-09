@@ -2,11 +2,12 @@ package com.itis2019.rickandmorty.repository
 
 import com.itis2019.rickandmorty.entities.Character
 import com.itis2019.rickandmorty.entities.Location
-import io.reactivex.Single
+import com.itis2019.rickandmorty.entities.Page
+import kotlinx.coroutines.Deferred
 
 interface Repository {
-    fun getCharactersPage(pageCount: Int): Single<List<Character>>
-    fun getLocationsPage(pageCount: Int): Single<List<Location>>
+    suspend fun getCharactersPageAsync(pageCount: Int): Deferred<Page<Character>>
+    suspend fun getLocationsPageAsync(pageCount: Int): Deferred<Page<Location>>
     fun getCachedCharacters(): List<Character>
     fun getCachedLocations(): List<Location>
     fun cacheCharacters(characters: List<Character>)
