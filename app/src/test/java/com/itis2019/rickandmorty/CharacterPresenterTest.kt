@@ -1,21 +1,20 @@
 package com.itis2019.rickandmorty
 
 import com.itis2019.rickandmorty.entities.Character
+import com.itis2019.rickandmorty.entities.Page
+import com.itis2019.rickandmorty.entities.PageInformation
 import com.itis2019.rickandmorty.repository.Repository
 import com.itis2019.rickandmorty.ui.characters.CharacterPresenter
 import com.itis2019.rickandmorty.ui.characters.CharacterView
 import com.itis2019.rickandmorty.ui.characters.`CharacterView$$State`
-import io.reactivex.Single
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
 import ru.terrakok.cicerone.Router
 
@@ -33,68 +32,77 @@ class CharacterPresenterTest {
     @Mock
     lateinit var mockViewState: `CharacterView$$State`
 
-    @InjectMocks
-    @Spy
     private lateinit var presenter: CharacterPresenter
 
     @Before
     fun setUp() {
-        Mockito.reset(mockViewState, presenter, mockRepository)
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+        presenter = CharacterPresenter(mockRepository, router, TestContextProvider())
         presenter.setViewState(mockViewState)
     }
 
     @Test
     fun onFirstViewAttach() {
-        val mockView = mock(CharacterView::class.java)
-        val charactersList = ArrayList<Character>()
-        doReturn(Single.just(charactersList)).`when`(mockRepository).getCharactersPage(1)
+        runBlocking {
+            val mockView = mock(CharacterView::class.java)
+            val charactersList = ArrayList<Character>()
+            doReturn(GlobalScope.async { Page(PageInformation(0, "", 0, ""), charactersList) })
+                .`when`(mockRepository).getCharactersPageAsync(1)
 
-        presenter.attachView(mockView)
+            presenter.attachView(mockView)
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).setItems(charactersList)
-        verify(mockViewState, timeout(100)).setFlagIsLoading(false)
-        verify(mockViewState, timeout(100)).hideProgress()
+            verify(mockViewState).showProgress()
+            verify(mockViewState).setItems(charactersList)
+            verify(mockViewState).setFlagIsLoading(false)
+            verify(mockViewState).hideProgress()
+        }
     }
 
     @Test
     fun whenPageLoadedSuccess() {
-        val charactersList = ArrayList<Character>()
-        doReturn(Single.just(charactersList)).`when`(mockRepository).getCharactersPage(1)
+        runBlocking {
+            val charactersList = ArrayList<Character>()
+            doReturn(GlobalScope.async { Page(PageInformation(0, "", 0, ""), charactersList) })
+                .`when`(mockRepository).getCharactersPageAsync(2)
 
-        presenter.onLoadNextPage(1)
+            presenter.onLoadNextPage(2)
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).setItems(charactersList)
-        verify(mockViewState, timeout(100)).setFlagIsLoading(false)
-        verify(mockViewState, timeout(100)).hideProgress()
+            verify(mockViewState).showProgress()
+            verify(mockViewState).setItems(charactersList)
+            verify(mockViewState).setFlagIsLoading(false)
+            verify(mockViewState).hideProgress()
+        }
     }
 
     @Test
     fun whenPageLoadedWithError() {
-        val expectedError = Throwable(TITLE_ERROR)
-        val charactersList = ArrayList<Character>()
-        doReturn(Single.error<Character>(expectedError)).`when`(mockRepository).getCharactersPage(1)
-        doReturn(charactersList).`when`(mockRepository).getCachedCharacters()
+        runBlocking {
+            val expectedError = Throwable(TITLE_ERROR)
+            val charactersList = ArrayList<Character>()
+            doReturn(GlobalScope.async { throw expectedError })
+                .`when`(mockRepository).getCharactersPageAsync(1)
+            doReturn(charactersList).`when`(mockRepository).getCachedCharacters()
 
-        presenter.onLoadNextPage(1)
+            presenter.onLoadNextPage(1)
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).showError(TITLE_ERROR)
-        verify(mockViewState, timeout(100)).setItems(charactersList)
-        verify(mockViewState, timeout(100)).hideProgress()
+            verify(mockViewState).showProgress()
+            verify(mockViewState).showError(TITLE_ERROR)
+            verify(mockViewState).setItems(charactersList)
+            verify(mockViewState).hideProgress()
+        }
     }
 
     @Test
     fun whenItemClicked() {
-        val charactersList = ArrayList<Character>()
-        charactersList.add(Character())
-        doReturn(Single.just(charactersList)).`when`(mockRepository).getCharactersPage(1)
+        runBlocking {
+            val charactersList = ArrayList<Character>()
+            charactersList.add(Character())
+            doReturn(GlobalScope.async { Page(PageInformation(0, "", 0, ""), charactersList) })
+                .`when`(mockRepository).getCharactersPageAsync(1)
 
-        presenter.onLoadNextPage(1)
-        presenter.onClickedItem(0)
+            presenter.onLoadNextPage(1)
+            presenter.onClickedItem(0)
 
-        verify(router, times(1)).navigateTo(Screens.CharacterInfoScreen(Character()))
+            verify(router, times(1)).navigateTo(Screens.CharacterInfoScreen(Character()))
+        }
     }
 }

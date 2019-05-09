@@ -1,21 +1,20 @@
 package com.itis2019.rickandmorty
 
 import com.itis2019.rickandmorty.entities.Location
+import com.itis2019.rickandmorty.entities.Page
+import com.itis2019.rickandmorty.entities.PageInformation
 import com.itis2019.rickandmorty.repository.Repository
 import com.itis2019.rickandmorty.ui.locations.LocationPresenter
 import com.itis2019.rickandmorty.ui.locations.LocationView
 import com.itis2019.rickandmorty.ui.locations.`LocationView$$State`
-import io.reactivex.Single
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -29,56 +28,61 @@ class LocationPresenterTest {
     @Mock
     lateinit var mockViewState: `LocationView$$State`
 
-    @InjectMocks
-    @Spy
     private lateinit var presenter: LocationPresenter
 
     @Before
     fun setUp() {
-        Mockito.reset(mockViewState, presenter, mockRepository)
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+        presenter = LocationPresenter(mockRepository, TestContextProvider())
         presenter.setViewState(mockViewState)
     }
 
     @Test
     fun onFirstViewAttach() {
-        val mockView = mock(LocationView::class.java)
-        val locationsList = ArrayList<Location>()
-        doReturn(Single.just(locationsList)).`when`(mockRepository).getLocationsPage(1)
+        runBlocking {
+            val mockView = mock(LocationView::class.java)
+            val locationsList = ArrayList<Location>()
+            doReturn(GlobalScope.async { Page(PageInformation(0, "", 0, ""), locationsList) })
+                .`when`(mockRepository).getLocationsPageAsync(1)
 
-        presenter.attachView(mockView)
+            presenter.attachView(mockView)
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).setItems(locationsList)
-        verify(mockViewState, timeout(100)).setFlagIsLoading(false)
-        verify(mockViewState, timeout(100)).hideProgress()
+            verify(mockViewState).showProgress()
+            verify(mockViewState).setItems(locationsList)
+            verify(mockViewState).setFlagIsLoading(false)
+            verify(mockViewState).hideProgress()
+        }
     }
 
     @Test
     fun whenPageLoadedSuccess() {
-        val locationsList = ArrayList<Location>()
-        doReturn(Single.just(locationsList)).`when`(mockRepository).getLocationsPage(2)
+        runBlocking {
+            val locationsList = ArrayList<Location>()
+            doReturn(GlobalScope.async { Page(PageInformation(0, "", 0, ""), locationsList) })
+                .`when`(mockRepository).getLocationsPageAsync(2)
+            presenter.onLoadNextPage(2)
 
-        presenter.onLoadNextPage(2)
-
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).setItems(locationsList)
-        verify(mockViewState, timeout(100)).setFlagIsLoading(false)
-        verify(mockViewState, timeout(100)).hideProgress()
+            verify(mockViewState).showProgress()
+            verify(mockViewState).setItems(locationsList)
+            verify(mockViewState).setFlagIsLoading(false)
+            verify(mockViewState).hideProgress()
+        }
     }
 
     @Test
     fun whenPageLoadedWithError() {
-        val locationsList = ArrayList<Location>()
-        val expectedError = Throwable(TITLE_ERROR)
-        doReturn(Single.error<Location>(expectedError)).`when`(mockRepository).getLocationsPage(1)
-        doReturn(locationsList).`when`(mockRepository).getCachedLocations()
+        runBlocking {
+            val expectedError = Throwable(TITLE_ERROR)
+            val locationsList = ArrayList<Location>()
+            doReturn(GlobalScope.async { throw expectedError })
+                .`when`(mockRepository).getLocationsPageAsync(1)
+            doReturn(locationsList).`when`(mockRepository).getCachedLocations()
 
-        presenter.onLoadNextPage(1)
+            presenter.onLoadNextPage(1)
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).showError(TITLE_ERROR)
-        verify(mockViewState, timeout(100)).setItems(locationsList)
-        verify(mockViewState, timeout(100)).hideProgress()
+            verify(mockViewState).showProgress()
+            verify(mockViewState).showError(TITLE_ERROR)
+            verify(mockViewState).setItems(locationsList)
+            verify(mockViewState).hideProgress()
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.itis2019.rickandmorty.di.module
 
+import com.itis2019.rickandmorty.CoroutineContextProvider
 import com.itis2019.rickandmorty.repository.Repository
 import com.itis2019.rickandmorty.ui.characters.CharacterPresenter
 import com.itis2019.rickandmorty.ui.locations.LocationPresenter
@@ -15,12 +16,12 @@ class PresentersModule {
     @Provides
     @Singleton
     fun provideCharactersPresenter(repository: Repository, router: Router): CharacterPresenter =
-        CharacterPresenter(repository, router)
+        CharacterPresenter(repository, router, CoroutineContextProvider())
 
     @Provides
     @Singleton
     fun provideLocationsPresenter(repository: Repository): LocationPresenter =
-        LocationPresenter(repository)
+        LocationPresenter(repository, CoroutineContextProvider())
 
     @Provides
     @Singleton

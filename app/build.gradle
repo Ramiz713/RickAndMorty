@@ -59,6 +59,7 @@ ext {
     kotlinCoroutineVersion = "1.2.1"
     espresso = '3.1.1'
     mockito = '2.25.0'
+    mockk = "1.9"
     glide = "4.9.0"
     retrofit = "2.5.0"
     room = '2.1.0-alpha07'
@@ -103,6 +104,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:$mockito"
     testImplementation "org.mockito:mockito-inline:$mockito"
+    testImplementation "io.mockk:mockk:${mockk}"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso"
