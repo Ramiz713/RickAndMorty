@@ -9,13 +9,20 @@ import com.itis2019.rickandmorty.entities.Location
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface LocationView : MvpView {
+
     fun setItems(items: List<Location>)
+
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun navigateToInfoActivity(location: Location)
-    fun setFlagIsLastPage(flag: Boolean)
-    fun setFlagIsLoading(flag: Boolean)
+
+    fun setIsLastPage()
+
+    fun setIsNotLoading()
+
     fun showProgress()
+
     fun hideProgress()
+
     @StateStrategyType(SkipStrategy::class)
     fun showError(message: String)
 }

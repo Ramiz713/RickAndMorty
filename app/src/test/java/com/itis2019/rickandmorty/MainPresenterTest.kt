@@ -22,13 +22,6 @@ class MainPresenterTest {
     private lateinit var router: Router
 
     @Test
-    fun whenSettingsPressed() {
-        presenter.onSettingsClicked()
-
-        verify(router, times(1)).navigateTo(Screens.SettingsScreen)
-    }
-
-    @Test
     fun whenBackPressed() {
         presenter.onBackPressed()
 

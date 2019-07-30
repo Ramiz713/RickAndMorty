@@ -26,7 +26,7 @@ class CharacterInfoActivity : MvpAppCompatActivity(), CharacterInfoView {
             Glide.with(this@CharacterInfoActivity).load(image).into(image_character)
             image_character.transitionName = intent.getStringExtra(EXTRA_IMAGE)
             tv_name.text = getString(R.string.name, name)
-            tv_status.text = getString(R.string.status, status)
+            tv_status.text = getString(R.string.status, status.value)
             tv_species.text = getString(R.string.species, species)
             tv_gender.text = getString(R.string.gender, gender)
             tv_origin.text = getString(R.string.origin, origin.name)

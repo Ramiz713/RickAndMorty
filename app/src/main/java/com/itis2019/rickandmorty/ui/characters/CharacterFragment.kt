@@ -102,12 +102,12 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
     override fun setItems(items: List<Character>) =
         adapter.submitList(items)
 
-    override fun setFlagIsLastPage(flag: Boolean) {
-        isLastPage = flag
+    override fun setIsLastPage() {
+        isLastPage = true
     }
 
-    override fun setFlagIsLoading(flag: Boolean) {
-        isLoading = flag
+    override fun setIsNotLoading() {
+        isLoading = false
     }
 
     override fun showError(message: String) {
@@ -117,16 +117,13 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
     private fun getNavigator(): Navigator =
         object : SupportAppNavigator(activity, childFragmentManager, R.id.container_characters) {
 
-            override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle {
-                val forward = command as Forward
-                if (forward.screen.screenKey == Screens.CharacterInfoScreen(Character()).screenKey) {
+            override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
+                if ((command as Forward).screen is Screens.CharacterInfoScreen) {
                     val transitionName = ViewCompat.getTransitionName(imageView) ?: ""
                     activityIntent.putExtra(MainActivity.EXTRA_IMAGE, transitionName)
                     val optionsCompat = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(activity as AppCompatActivity, imageView, transitionName)
-                    return optionsCompat.toBundle() ?: Bundle()
-                }
-                return Bundle()
-            }
+                    optionsCompat.toBundle() ?: Bundle()
+                } else null
         }
 }

@@ -1,6 +1,6 @@
 package com.itis2019.rickandmorty.di.module
 
-import com.itis2019.rickandmorty.repository.RickAndMortyApiService
+import com.itis2019.rickandmorty.api.RickAndMortyApiService
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

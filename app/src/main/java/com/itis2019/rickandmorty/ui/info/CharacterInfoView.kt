@@ -6,5 +6,6 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface CharacterInfoView : MvpView {
+
     fun bindData()
 }

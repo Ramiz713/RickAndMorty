@@ -5,8 +5,8 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.itis2019.rickandmorty.entities.Location
 import com.itis2019.rickandmorty.repository.Repository
-import com.itis2019.rickandmorty.subscribeSingleOnIoObserveOnUi
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 
 @InjectViewState
@@ -19,21 +19,24 @@ class LocationPresenter(private val repository: Repository) : MvpPresenter<Locat
     @SuppressLint("CheckResult")
     fun onLoadNextPage(pageCount: Int) {
         repository.getLocationsPage(pageCount)
-            .doOnSuccess {
-                viewState.setFlagIsLoading(false)
-                if (pageCount != 1) repository.cacheLocations(it)
-                else repository.rewriteCacheLocations(it)
+            .map {
+                if (it.pageInformation.next.isEmpty())
+                    viewState.setIsLastPage()
+                it.results
             }
+            .doOnSuccess { repository.cacheLocations(it) }
             .onErrorResumeNext {
                 viewState.showError(it.message ?: "")
+                locationList.clear()
                 Single.just(repository.getCachedLocations())
             }
-            .subscribeSingleOnIoObserveOnUi()
+            .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { viewState.showProgress() }
             .doAfterTerminate { viewState.hideProgress() }
+            .doAfterTerminate { viewState.setIsNotLoading() }
             .subscribeBy {
                 locationList.addAll(it)
-                viewState.setItems(locationList)
+                viewState.setItems(locationList.toList())
             }
     }
 }

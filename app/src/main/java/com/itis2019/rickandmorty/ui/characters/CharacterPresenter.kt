@@ -5,8 +5,8 @@ import com.arellomobile.mvp.MvpPresenter
 import com.itis2019.rickandmorty.Screens
 import com.itis2019.rickandmorty.entities.Character
 import com.itis2019.rickandmorty.repository.Repository
-import com.itis2019.rickandmorty.subscribeSingleOnIoObserveOnUi
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import ru.terrakok.cicerone.Router
 
@@ -21,24 +21,24 @@ class CharacterPresenter(private val repository: Repository, private val router:
     @Suppress("CheckResult")
     fun onLoadNextPage(pageCount: Int) {
         repository.getCharactersPage(pageCount)
-            .doOnSuccess {
-                viewState.setFlagIsLoading(false)
-                if (pageCount != 1) repository.cacheCharacters(it)
-                else repository.rewriteCacheCharacters(it)
-            }
             .map {
-                charactersList.addAll(it)
-                charactersList.toList()
+                if (it.pageInformation.next.isEmpty())
+                    viewState.setIsLastPage()
+                it.results
             }
+            .doOnSuccess { repository.cacheCharacters(it) }
             .onErrorResumeNext {
                 viewState.showError(it.message ?: "")
+                charactersList.clear()
                 Single.just(repository.getCachedCharacters())
             }
-            .subscribeSingleOnIoObserveOnUi()
+            .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { viewState.showProgress() }
             .doAfterTerminate { viewState.hideProgress() }
+            .doAfterTerminate { viewState.setIsNotLoading() }
             .subscribeBy {
-                viewState.setItems(it)
+                charactersList.addAll(it)
+                viewState.setItems(charactersList.toList())
             }
     }
 

@@ -34,10 +34,10 @@
 
     <TextView
         android:id="@+id/tv_name"
+        style="@style/TextAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:fontFamily="@font/roiland_sans"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_status"
         app:layout_constraintHorizontal_bias="0"
@@ -47,9 +47,9 @@
 
     <TextView
         android:id="@+id/tv_status"
+        style="@style/TextAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roiland_sans"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_species"
         app:layout_constraintHorizontal_bias="0"
@@ -59,9 +59,9 @@
 
     <TextView
         android:id="@+id/tv_species"
+        style="@style/TextAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roiland_sans"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_gender"
         app:layout_constraintHorizontal_bias="0"
@@ -71,9 +71,9 @@
 
     <TextView
         android:id="@+id/tv_gender"
+        style="@style/TextAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roiland_sans"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_origin"
         app:layout_constraintHorizontal_bias="0"
@@ -83,9 +83,9 @@
 
     <TextView
         android:id="@+id/tv_origin"
+        style="@style/TextAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roiland_sans"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_location"
         app:layout_constraintHorizontal_bias="0"
@@ -95,9 +95,9 @@
 
     <TextView
         android:id="@+id/tv_location"
+        style="@style/TextAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roiland_sans"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0"

@@ -11,11 +11,7 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/LightTheme">
-        <activity
-                android:name=".ui.bottomNavigation.BottomNavigationActivity"
-                android:label="@string/title_activity_bottom_navigation">
-        </activity>
+        android:theme="@style/RickAndMortyTheme">
         <activity android:name=".ui.info.CharacterInfoActivity">
         </activity>
         <activity android:name=".ui.main.MainActivity">

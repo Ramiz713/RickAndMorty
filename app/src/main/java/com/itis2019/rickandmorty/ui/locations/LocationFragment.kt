@@ -68,12 +68,12 @@ class LocationFragment : MvpAppCompatFragment(), LocationView {
     override fun navigateToInfoActivity(location: Location) {
     }
 
-    override fun setFlagIsLastPage(flag: Boolean) {
-        isLastPage = flag
+    override fun setIsLastPage() {
+        isLastPage = true
     }
 
-    override fun setFlagIsLoading(flag: Boolean) {
-        isLoading = flag
+    override fun setIsNotLoading() {
+        isLoading = false
     }
 
     override fun showProgress() {
