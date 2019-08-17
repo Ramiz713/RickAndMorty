@@ -7,4 +7,8 @@
     <string name="origin">Origin: %1$s</string>
     <string name="location">Location: %1$s</string>
     <string name="filter">Filter</string>
+    <string name="alive">Alive</string>
+    <string name="unknown">Unknown</string>
+    <string name="dead">Dead</string>
+    <string name="all">All</string>
 </resources>

@@ -57,15 +57,14 @@ detekt {
 ext {
     dagger = "2.21"
     cicerone = "5.0.0"
-    moxyVersion = "1.7.0"
+    moxy = "1.7.0"
     espresso = "3.1.1"
     mockito = "2.25.0"
     glide = "4.9.0"
     rxandroid = "2.1.0"
     rxkotlin = "2.3.0"
     retrofit = "2.5.0"
-    room = "2.2.0-alpha01"
-    support = "1.0.0-beta01"
+    room = "2.2.0-alpha02"
 }
 
 dependencies {
@@ -81,9 +80,9 @@ dependencies {
 
     implementation "com.github.bumptech.glide:glide:$glide"
 
-    implementation "tech.schoolhelper:moxy-x:$moxyVersion"
-    implementation "tech.schoolhelper:moxy-x-androidx:$moxyVersion"
-    kapt "tech.schoolhelper:moxy-x-compiler:$moxyVersion"
+    implementation "tech.schoolhelper:moxy-x:$moxy"
+    implementation "tech.schoolhelper:moxy-x-androidx:$moxy"
+    kapt "tech.schoolhelper:moxy-x-compiler:$moxy"
 
     implementation "androidx.room:room-runtime:$room"
     kapt "androidx.room:room-compiler:$room"
@@ -93,10 +92,10 @@ dependencies {
 
     implementation "ru.terrakok.cicerone:cicerone:$cicerone"
 
-    implementation "androidx.recyclerview:recyclerview:1.1.0-beta01"
+    implementation "androidx.recyclerview:recyclerview:1.1.0-beta02"
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "com.google.android.material:material:1.1.0-alpha08"
+    implementation "com.google.android.material:material:1.1.0-alpha09"
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 

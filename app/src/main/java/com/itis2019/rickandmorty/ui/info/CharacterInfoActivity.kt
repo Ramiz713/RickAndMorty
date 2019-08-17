@@ -23,7 +23,9 @@ class CharacterInfoActivity : MvpAppCompatActivity(), CharacterInfoView {
 
     override fun bindData() =
         with(intent.getParcelableExtra<Character>(EXTRA_CHARACTER_ITEM)) {
-            Glide.with(this@CharacterInfoActivity).load(image).into(image_character)
+            Glide.with(this@CharacterInfoActivity)
+                .load(image)
+                .into(image_character)
             image_character.transitionName = intent.getStringExtra(EXTRA_IMAGE)
             tv_name.text = getString(R.string.name, name)
             tv_status.text = getString(R.string.status, status.value)

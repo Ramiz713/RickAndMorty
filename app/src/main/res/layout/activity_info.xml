@@ -4,46 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingStart="32dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="32dp"
+    android:paddingBottom="16dp"
     tools:context=".ui.info.CharacterInfoActivity">
 
     <ImageView
         android:id="@+id/image_character"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:src="@mipmap/ic_launcher"
+        android:adjustViewBounds="true"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintLeft_toLeftOf="@id/line_left"
-        app:layout_constraintRight_toRightOf="@id/line_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/line_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.1" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/line_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.9" />
 
     <TextView
         android:id="@+id/tv_name"
         style="@style/TextAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_status"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintLeft_toLeftOf="@id/line_left"
-        app:layout_constraintRight_toRightOf="@id/line_right"
-        app:layout_constraintTop_toBottomOf="@id/image_character" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_character"
+        app:layout_constraintVertical_bias="0" />
 
     <TextView
         android:id="@+id/tv_status"
@@ -52,9 +41,8 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_species"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintLeft_toLeftOf="@id/line_left"
-        app:layout_constraintRight_toRightOf="@id/line_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
     <TextView
@@ -64,9 +52,8 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_gender"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintLeft_toLeftOf="@id/line_left"
-        app:layout_constraintRight_toRightOf="@id/line_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_status" />
 
     <TextView
@@ -76,9 +63,8 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_origin"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintLeft_toLeftOf="@id/line_left"
-        app:layout_constraintRight_toRightOf="@id/line_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_species" />
 
     <TextView
@@ -88,9 +74,8 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/tv_location"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintLeft_toLeftOf="@id/line_left"
-        app:layout_constraintRight_toRightOf="@id/line_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_gender" />
 
     <TextView
@@ -100,9 +85,8 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintLeft_toLeftOf="@id/line_left"
-        app:layout_constraintRight_toRightOf="@id/line_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_origin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

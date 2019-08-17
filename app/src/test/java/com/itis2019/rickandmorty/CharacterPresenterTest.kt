@@ -22,15 +22,24 @@ import ru.terrakok.cicerone.Router
 class CharacterPresenterTest {
 
     private val TITLE_ERROR = "error"
-    private val character = Character(
+    private val aliveCharacter = Character(
         "", ArrayList(),
         "", 0, "",
         CharacterLocation("", ""),
         "", CharacterLocation("", ""),
         "", Status.ALIVE, "", ""
     )
-    private val charactersList = listOf(character)
-    private val page = Page(PageInformation(1, "", 1, ""), charactersList)
+    private val deadCharacter = Character(
+        "", ArrayList(),
+        "", 1, "",
+        CharacterLocation("", ""),
+        "", CharacterLocation("", ""),
+        "", Status.DEAD, "", ""
+    )
+    private val firstPage = Page(PageInformation(1, "", 1, ""), listOf(aliveCharacter))
+    private val secondPage = Page(PageInformation(2, "", 1, ""), listOf(deadCharacter))
+    private val firstPageCharacters = firstPage.results
+    private val secondPageCharacters = secondPage.results
 
 
     @Mock
@@ -56,49 +65,71 @@ class CharacterPresenterTest {
     @Test
     fun onFirstViewAttach() {
         val mockView = mock(CharacterView::class.java)
-        doReturn(Single.just(page)).`when`(mockRepository).getCharactersPage(1)
+        doReturn(Single.just(firstPage)).`when`(mockRepository).getCharactersPage(1)
 
         presenter.attachView(mockView)
 
         verify(mockViewState).showProgress()
-        verify(mockViewState).setItems(charactersList)
+        verify(mockViewState).setItems(firstPage.results)
         verify(mockViewState).setIsNotLoading()
         verify(mockViewState).hideProgress()
     }
 
     @Test
     fun whenPageLoadedSuccess() {
-        doReturn(Single.just(page)).`when`(mockRepository).getCharactersPage(2)
+        val mockView = mock(CharacterView::class.java)
+        doReturn(Single.just(firstPage)).`when`(mockRepository).getCharactersPage(1)
+        doReturn(Single.just(secondPage)).`when`(mockRepository).getCharactersPage(2)
 
-        presenter.onLoadNextPage(2)
+        presenter.attachView(mockView)
+        presenter.loadNextPage()
 
-        verify(mockViewState).showProgress()
-        verify(mockViewState).setItems(charactersList)
-        verify(mockViewState).setIsNotLoading()
-        verify(mockViewState).hideProgress()
+        verify(mockViewState, times(2)).showProgress()
+        verify(mockViewState).setItems(firstPage.results)
+        verify(mockViewState).setItems(listOf(aliveCharacter, deadCharacter))
+        verify(mockViewState, times(2)).setIsNotLoading()
+        verify(mockViewState, times(2)).hideProgress()
     }
 
     @Test
     fun whenPageLoadedWithError() {
         val expectedError = Throwable(TITLE_ERROR)
-        doReturn(Single.error<Character>(expectedError)).`when`(mockRepository).getCharactersPage(2)
-        doReturn(charactersList).`when`(mockRepository).getCachedCharacters()
+        doReturn(Single.error<Character>(expectedError)).`when`(mockRepository).getCharactersPage(1)
+        doReturn(firstPage.results).`when`(mockRepository).getCachedCharacters()
 
-        presenter.onLoadNextPage(2)
+        presenter.loadNextPage()
 
         verify(mockViewState).showProgress()
         verify(mockViewState).showError(TITLE_ERROR)
-        verify(mockViewState).setItems(charactersList)
+        verify(mockViewState).setItems(firstPage.results)
         verify(mockViewState).hideProgress()
     }
 
     @Test
     fun whenItemClicked() {
-        doReturn(Single.just(page)).`when`(mockRepository).getCharactersPage(1)
+        doReturn(Single.just(firstPage)).`when`(mockRepository).getCharactersPage(1)
 
-        presenter.onLoadNextPage(1)
+        presenter.loadNextPage()
         presenter.onClickedItem(0)
 
-        verify(router, times(1)).navigateTo(Screens.CharacterInfoScreen(character))
+        verify(router, times(1)).navigateTo(Screens.CharacterInfoScreen(aliveCharacter))
+    }
+
+    @Test
+    fun whenFilterAccepted() {
+        val mockView = mock(CharacterView::class.java)
+        doReturn(Single.just(firstPage)).`when`(mockRepository).getCharactersPage(1)
+        doReturn(Single.just(secondPage)).`when`(mockRepository).getCharactersPage(2)
+
+        presenter.attachView(mockView)
+        presenter.loadNextPage()
+        presenter.onFilterClicked(Status.DEAD)
+
+        verify(mockViewState, times(2)).showProgress()
+        verify(mockViewState).setItems(firstPage.results)
+        verify(mockViewState).setItems(listOf(aliveCharacter, deadCharacter))
+        verify(mockViewState).setItems(secondPage.results)
+        verify(mockViewState, times(2)).setIsNotLoading()
+        verify(mockViewState, times(2)).hideProgress()
     }
 }

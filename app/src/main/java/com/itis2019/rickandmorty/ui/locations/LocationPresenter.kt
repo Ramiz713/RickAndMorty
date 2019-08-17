@@ -13,18 +13,18 @@ import io.reactivex.rxkotlin.subscribeBy
 class LocationPresenter(private val repository: Repository) : MvpPresenter<LocationView>() {
 
     private var locationList = ArrayList<Location>()
+    private var currentPage = 1
 
-    override fun onFirstViewAttach() = onLoadNextPage(1)
+    override fun onFirstViewAttach() = loadNextPage()
 
     @SuppressLint("CheckResult")
-    fun onLoadNextPage(pageCount: Int) {
-        repository.getLocationsPage(pageCount)
+    fun loadNextPage() {
+        repository.getLocationsPage(currentPage++)
             .map {
                 if (it.pageInformation.next.isEmpty())
                     viewState.setIsLastPage()
                 it.results
             }
-            .doOnSuccess { repository.cacheLocations(it) }
             .onErrorResumeNext {
                 viewState.showError(it.message ?: "")
                 locationList.clear()

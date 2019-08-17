@@ -14,8 +14,4 @@ interface Repository {
     fun getCachedCharacters(): List<Character>
 
     fun getCachedLocations(): List<Location>
-
-    fun cacheCharacters(characters: List<Character>)
-
-    fun cacheLocations(locations: List<Location>)
 }

@@ -5,7 +5,5 @@ import ru.terrakok.cicerone.Router
 
 class MainPresenter(private val router: Router) : MvpPresenter<MainView>() {
 
-    fun onSettingsClicked() {}
-
     fun onBackPressed() = router.exit()
 }

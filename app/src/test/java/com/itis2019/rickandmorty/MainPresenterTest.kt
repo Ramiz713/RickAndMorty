@@ -5,7 +5,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
@@ -25,6 +24,6 @@ class MainPresenterTest {
     fun whenBackPressed() {
         presenter.onBackPressed()
 
-        verify(router, times(1)).exit()
+        verify(router).exit()
     }
 }

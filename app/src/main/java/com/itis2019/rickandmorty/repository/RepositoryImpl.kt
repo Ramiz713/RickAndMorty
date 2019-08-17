@@ -18,20 +18,18 @@ class RepositoryImpl(
     override fun getCharactersPage(pageCount: Int): Single<Page<Character>> =
         apiService.getCharactersList(pageCount)
             .subscribeOn(Schedulers.io())
+            .doOnSuccess { cacheCharacters(it.results) }
 
     override fun getLocationsPage(pageCount: Int): Single<Page<Location>> =
         apiService.getLocationsList(pageCount)
             .subscribeOn(Schedulers.io())
+            .doOnSuccess { cacheLocations(it.results) }
 
     override fun getCachedCharacters(): List<Character> = characterDao.getAll()
 
     override fun getCachedLocations(): List<Location> = locationDao.getAll()
 
-    override fun cacheCharacters(characters: List<Character>) {
-        characterDao.insertAll(characters)
-    }
+    private fun cacheCharacters(characters: List<Character>) = characterDao.insertAll(characters)
 
-    override fun cacheLocations(locations: List<Location>) {
-        locationDao.insertAll(locations)
-    }
+    private fun cacheLocations(locations: List<Location>) = locationDao.insertAll(locations)
 }

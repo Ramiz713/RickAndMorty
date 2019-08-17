@@ -59,9 +59,9 @@ class LocationPresenterTest {
 
     @Test
     fun whenPageLoadedSuccess() {
-        doReturn(Single.just(page)).`when`(mockRepository).getLocationsPage(2)
+        doReturn(Single.just(page)).`when`(mockRepository).getLocationsPage(1)
 
-        presenter.onLoadNextPage(2)
+        presenter.loadNextPage()
 
         verify(mockViewState).showProgress()
         verify(mockViewState).setItems(locationsList)
@@ -75,7 +75,7 @@ class LocationPresenterTest {
         doReturn(Single.error<Location>(expectedError)).`when`(mockRepository).getLocationsPage(1)
         doReturn(locationsList).`when`(mockRepository).getCachedLocations()
 
-        presenter.onLoadNextPage(1)
+        presenter.loadNextPage()
 
         verify(mockViewState).showProgress()
         verify(mockViewState).showError(TITLE_ERROR)
