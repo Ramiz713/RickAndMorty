@@ -2,9 +2,7 @@ package com.itis2019.rickandmorty.ui.characters
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -19,6 +17,7 @@ import com.itis2019.rickandmorty.App
 import com.itis2019.rickandmorty.R
 import com.itis2019.rickandmorty.Screens
 import com.itis2019.rickandmorty.entities.Character
+import com.itis2019.rickandmorty.entities.Status
 import com.itis2019.rickandmorty.ui.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_character.*
 import ru.terrakok.cicerone.Navigator
@@ -52,17 +51,24 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
     override fun onCreate(savedInstanceState: Bundle?) {
         App.component.inject(this)
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_character, container, false)
-        val manager = GridLayoutManager(activity, 3)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.rv_characters)
-        recyclerView.layoutManager = manager
-        recyclerView.adapter = adapter
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
+        inflater.inflate(R.layout.fragment_character, container, false)
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            private var currentPage = 1
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val manager = GridLayoutManager(activity, 2)
+        rv_characters.layoutManager = manager
+        rv_characters.adapter = adapter
+
+        rv_characters.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -73,12 +79,11 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
 
                     if (!isLoading && !isLastPage && pastVisibleItems + visibleItemCount >= totalItemCount) {
                         isLoading = true
-                        characterPresenter.onLoadNextPage(++currentPage)
+                        characterPresenter.loadNextPage()
                     }
                 }
             }
         })
-        return view
     }
 
     override fun onResume() {
@@ -91,42 +96,61 @@ class CharacterFragment : MvpAppCompatFragment(), CharacterView {
         super.onPause()
     }
 
-    override fun showProgress() {
-        progress_bar.visibility = View.VISIBLE
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_characters, menu)
     }
 
-    override fun hideProgress() {
-        progress_bar.visibility = View.GONE
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
+            R.id.alive -> {
+                characterPresenter.onFilterClicked(Status.ALIVE)
+                true
+            }
+            R.id.dead -> {
+                characterPresenter.onFilterClicked(Status.DEAD)
+                true
+            }
+            R.id.unknown -> {
+                characterPresenter.onFilterClicked(Status.UNKNOWN)
+                true
+            }
+            R.id.all -> {
+                characterPresenter.onFilterClicked(null)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
+    override fun setItems(items: List<Character>?) = adapter.submitList(items)
+
+    override fun setIsLastPage() {
+        isLastPage = true
     }
 
-    override fun setItems(items: List<Character>) =
-        adapter.submitList(items)
-
-    override fun setFlagIsLastPage(flag: Boolean) {
-        isLastPage = flag
+    override fun setIsNotLoading() {
+        isLoading = false
     }
 
-    override fun setFlagIsLoading(flag: Boolean) {
-        isLoading = flag
-    }
+    override fun showProgress() = progress_bar.run { visibility = View.VISIBLE }
+
+    override fun hideProgress() = progress_bar.run { visibility = View.GONE }
 
     override fun showError(message: String) {
-        view?.let { Snackbar.make(it, message, Snackbar.LENGTH_LONG).show() }
+        if (userVisibleHint)
+            Snackbar.make(container_characters, message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun getNavigator(): Navigator =
         object : SupportAppNavigator(activity, childFragmentManager, R.id.container_characters) {
 
-            override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle {
-                val forward = command as Forward
-                if (forward.screen.screenKey == Screens.CharacterInfoScreen(Character()).screenKey) {
+            override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
+                if ((command as Forward).screen is Screens.CharacterInfoScreen) {
                     val transitionName = ViewCompat.getTransitionName(imageView) ?: ""
                     activityIntent.putExtra(MainActivity.EXTRA_IMAGE, transitionName)
                     val optionsCompat = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(activity as AppCompatActivity, imageView, transitionName)
-                    return optionsCompat.toBundle() ?: Bundle()
-                }
-                return Bundle()
-            }
+                    optionsCompat.toBundle() ?: Bundle()
+                } else null
         }
 }

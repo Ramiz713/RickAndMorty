@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.itis2019.rickandmorty.R
 import com.itis2019.rickandmorty.entities.Character
 import kotlinx.android.extensions.LayoutContainer
@@ -39,7 +40,11 @@ class CharacterAdapter(private val listener: (Int, ImageView) -> Unit) :
         LayoutContainer {
         fun bind(item: Character): Unit = with(item) {
             tv_character_name.text = name
-            Glide.with(containerView).load(image).into(image_character)
+            Glide.with(containerView)
+                .load(image)
+                .placeholder(R.drawable.placeholder)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(image_character)
         }
     }
 

@@ -11,7 +11,7 @@ import com.itis2019.rickandmorty.entities.Location
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.location_item.*
 
-class LocationAdapter(private val listener: (Int) -> Unit) :
+class LocationAdapter :
     ListAdapter<Location, LocationAdapter.LocationHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationHolder =
@@ -26,7 +26,6 @@ class LocationAdapter(private val listener: (Int) -> Unit) :
     override fun onBindViewHolder(holder: LocationHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
-        holder.itemView.setOnClickListener { listener(position) }
     }
 
     inner class LocationHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),

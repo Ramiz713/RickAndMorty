@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
 class TabPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
+
     private val fragmentList = ArrayList<Fragment>()
     private val fragmentTitlesList = ArrayList<String>()
 

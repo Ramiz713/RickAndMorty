@@ -8,6 +8,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.itis2019.rickandmorty.entities.Character
+import com.itis2019.rickandmorty.entities.CharacterLocation
+import com.itis2019.rickandmorty.entities.Status
 import com.itis2019.rickandmorty.ui.info.CharacterInfoActivity
 import com.itis2019.rickandmorty.ui.main.MainActivity.Companion.EXTRA_CHARACTER_ITEM
 import org.junit.Rule
@@ -34,7 +36,14 @@ class CharacterInfoActivityTest {
 
     private fun launchActivity() {
         val intent = Intent()
-        intent.putExtra(EXTRA_CHARACTER_ITEM, Character())
+        val character = Character(
+            "", ArrayList(),
+            "", 0, "",
+            CharacterLocation("", ""),
+            "", CharacterLocation("", ""),
+            "", Status.ALIVE, "", ""
+        )
+        intent.putExtra(EXTRA_CHARACTER_ITEM, character)
         activity.launchActivity(intent)
     }
 }

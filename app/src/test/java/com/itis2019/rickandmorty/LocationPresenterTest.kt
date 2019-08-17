@@ -1,6 +1,8 @@
 package com.itis2019.rickandmorty
 
 import com.itis2019.rickandmorty.entities.Location
+import com.itis2019.rickandmorty.entities.Page
+import com.itis2019.rickandmorty.entities.PageInformation
 import com.itis2019.rickandmorty.repository.Repository
 import com.itis2019.rickandmorty.ui.locations.LocationPresenter
 import com.itis2019.rickandmorty.ui.locations.LocationView
@@ -13,7 +15,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
@@ -22,6 +23,9 @@ import org.mockito.junit.MockitoJUnitRunner
 class LocationPresenterTest {
 
     private val TITLE_ERROR = "error"
+    private val location = Location("", "", 0, "", emptyList(), "", "")
+    private val locationsList = listOf(location)
+    private val page = Page(PageInformation(1, "", 1, ""), locationsList)
 
     @Mock
     lateinit var mockRepository: Repository
@@ -35,7 +39,7 @@ class LocationPresenterTest {
 
     @Before
     fun setUp() {
-        Mockito.reset(mockViewState, presenter, mockRepository)
+        reset(mockViewState, presenter, mockRepository)
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
         presenter.setViewState(mockViewState)
     }
@@ -43,42 +47,39 @@ class LocationPresenterTest {
     @Test
     fun onFirstViewAttach() {
         val mockView = mock(LocationView::class.java)
-        val locationsList = ArrayList<Location>()
-        doReturn(Single.just(locationsList)).`when`(mockRepository).getLocationsPage(1)
+        doReturn(Single.just(page)).`when`(mockRepository).getLocationsPage(1)
 
         presenter.attachView(mockView)
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).setItems(locationsList)
-        verify(mockViewState, timeout(100)).setFlagIsLoading(false)
-        verify(mockViewState, timeout(100)).hideProgress()
+        verify(mockViewState).showProgress()
+        verify(mockViewState).setItems(locationsList)
+        verify(mockViewState).setIsNotLoading()
+        verify(mockViewState).hideProgress()
     }
 
     @Test
     fun whenPageLoadedSuccess() {
-        val locationsList = ArrayList<Location>()
-        doReturn(Single.just(locationsList)).`when`(mockRepository).getLocationsPage(2)
+        doReturn(Single.just(page)).`when`(mockRepository).getLocationsPage(1)
 
-        presenter.onLoadNextPage(2)
+        presenter.loadNextPage()
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).setItems(locationsList)
-        verify(mockViewState, timeout(100)).setFlagIsLoading(false)
-        verify(mockViewState, timeout(100)).hideProgress()
+        verify(mockViewState).showProgress()
+        verify(mockViewState).setItems(locationsList)
+        verify(mockViewState).setIsNotLoading()
+        verify(mockViewState).hideProgress()
     }
 
     @Test
     fun whenPageLoadedWithError() {
-        val locationsList = ArrayList<Location>()
         val expectedError = Throwable(TITLE_ERROR)
         doReturn(Single.error<Location>(expectedError)).`when`(mockRepository).getLocationsPage(1)
         doReturn(locationsList).`when`(mockRepository).getCachedLocations()
 
-        presenter.onLoadNextPage(1)
+        presenter.loadNextPage()
 
-        verify(mockViewState, timeout(100)).showProgress()
-        verify(mockViewState, timeout(100)).showError(TITLE_ERROR)
-        verify(mockViewState, timeout(100)).setItems(locationsList)
-        verify(mockViewState, timeout(100)).hideProgress()
+        verify(mockViewState).showProgress()
+        verify(mockViewState).showError(TITLE_ERROR)
+        verify(mockViewState).setItems(locationsList)
+        verify(mockViewState).hideProgress()
     }
 }

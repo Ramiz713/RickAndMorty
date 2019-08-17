@@ -28,22 +28,27 @@ class LocationFragment : MvpAppCompatFragment(), LocationView {
     @ProvidePresenter
     fun provideLocationPresenter(): LocationPresenter = locationPresenter
 
-    private val adapter = LocationAdapter { position: Int -> }
+    private val adapter = LocationAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.component.inject(this)
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_location, container, false)
-        val manager = GridLayoutManager(activity, 2)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.rv_locations)
-        recyclerView.layoutManager = manager
-        recyclerView.adapter = adapter
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_location, container, false)
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            private var currentPage = 1
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val manager = GridLayoutManager(activity, 2)
+        rv_locations.layoutManager = manager
+        rv_locations.adapter = adapter
+
+        rv_locations.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -54,37 +59,29 @@ class LocationFragment : MvpAppCompatFragment(), LocationView {
 
                     if (!isLoading && !isLastPage && pastVisibleItems + visibleItemCount >= totalItemCount) {
                         isLoading = true
-                        locationPresenter.onLoadNextPage(++currentPage)
+                        locationPresenter.loadNextPage()
                     }
                 }
             }
         })
-        return view
     }
 
-    override fun setItems(items: List<Location>) =
-        adapter.submitList(items)
+    override fun setItems(items: List<Location>) = adapter.submitList(items)
 
-    override fun navigateToInfoActivity(location: Location) {
+    override fun setIsLastPage() {
+        isLastPage = true
     }
 
-    override fun setFlagIsLastPage(flag: Boolean) {
-        isLastPage = flag
+    override fun setIsNotLoading() {
+        isLoading = false
     }
 
-    override fun setFlagIsLoading(flag: Boolean) {
-        isLoading = flag
-    }
+    override fun showProgress() = progress_bar.run { visibility = View.VISIBLE }
 
-    override fun showProgress() {
-        progress_bar.visibility = View.VISIBLE
-    }
-
-    override fun hideProgress() {
-        progress_bar.visibility = View.GONE
-    }
+    override fun hideProgress() = progress_bar.run { visibility = View.GONE }
 
     override fun showError(message: String) {
-        view?.let { Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show() }
+        if (userVisibleHint)
+            Snackbar.make(container_locations, message, Snackbar.LENGTH_SHORT).show()
     }
 }

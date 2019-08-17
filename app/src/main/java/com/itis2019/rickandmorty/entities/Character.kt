@@ -5,7 +5,8 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.itis2019.rickandmorty.repository.database.EpisodesConverter
+import com.itis2019.rickandmorty.database.converters.EpisodesConverter
+import com.itis2019.rickandmorty.database.converters.StatusConverter
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -24,15 +25,8 @@ data class Character(
     @Embedded(prefix = "origin_")
     val origin: CharacterLocation,
     val species: String,
-    val status: String,
+    @TypeConverters(StatusConverter::class)
+    val status: Status,
     val type: String,
     val url: String
-) : Parcelable {
-    constructor() : this(
-        "", ArrayList(),
-        "", 0, "",
-        CharacterLocation("", ""),
-        "", CharacterLocation("", ""),
-        "", "", "", ""
-    )
-}
+) : Parcelable

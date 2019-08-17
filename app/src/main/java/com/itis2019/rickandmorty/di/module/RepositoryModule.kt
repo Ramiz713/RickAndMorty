@@ -1,10 +1,10 @@
 package com.itis2019.rickandmorty.di.module
 
+import com.itis2019.rickandmorty.api.RickAndMortyApiService
+import com.itis2019.rickandmorty.database.CharacterDao
+import com.itis2019.rickandmorty.database.LocationDao
 import com.itis2019.rickandmorty.repository.Repository
 import com.itis2019.rickandmorty.repository.RepositoryImpl
-import com.itis2019.rickandmorty.repository.RickAndMortyApiService
-import com.itis2019.rickandmorty.repository.database.CharacterDao
-import com.itis2019.rickandmorty.repository.database.LocationDao
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
